@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Parallelix Client Test</title>
+        
+    </head>
+    <body>
+        <!-- Application Test -->
+        <div id="application" class="application">
+
+        </div>
+        <!-- Application Test -->
+
+        <!-- Connect Parallelix -->
+        <script type="text/javascript" src="client/parallelix.js"></script>
+        <script type="text/javascript">
+            /* Initialize Parallelix */
+            const client = new Parallelix({
+                
+            });
+            client.OnError = (error) => {
+                console.error(error.message);
+            };
+
+            /* Initialize Application */
+            client.Initialize();
+        </script>
+        <!-- Connect Parallelix -->
+    </body>
+</html>

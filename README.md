@@ -28,4 +28,4 @@ Welcome to the **Parallelix JS** - the main page of the library repository for c
   <tr><td>USDT (TRC20)</td><td>TMR3ZqeXSGgTjqrRtgNBvZRGFKrKHBcNHT</td></tr>
 </table>
 
-![GameShield Wiki](https://github.com/Neurosell/parallelix/blob/wiki_visuals/Footer.png?raw=true)
+![Neurosell Libraries](https://github.com/Neurosell/parallelix/blob/wiki_visuals/Footer.png?raw=true)
