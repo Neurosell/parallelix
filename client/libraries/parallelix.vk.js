@@ -62,6 +62,7 @@ class ParallelixVK extends ParallelixWrapper {
                 if (data.result) {
                     self.isInitialized = true;
                     self.OnInitialized(data);
+                    self.HandleEvents();
                 } else {
                     self.OnError(new Error("VK Bridge initialization failed"));
                 }
@@ -123,6 +124,27 @@ class ParallelixVK extends ParallelixWrapper {
         }
 
         return isVKPlatform;
+    }
+
+    /**
+     * Handle All VK Bridge Events
+     */
+    HandleEvents(){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Subscribe to VK Bridge Events
+        vkBridge.subscribe((event) => {
+            if(!event.detail) return;
+
+            const { type, data } = event.detail;
+            self.GetEventListener(type)?.(data);
+        });
     }
 }
 

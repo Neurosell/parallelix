@@ -58,6 +58,7 @@
             };
             client.OnInitialized = (data) => {
                 console.log(client.GetPlatformName());
+                console.log(client.Platform);
                 document.getElementById("current-platform").innerHTML = client.GetPlatformName();
                 hidePreloader();
             };

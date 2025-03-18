@@ -10,7 +10,10 @@
  * @github                  https://github.com/Neurosell/parallelix
  */
 
-/* Basic Wrapper Class */
+/**
+ * Basic Wrapper Class for Platforms Definitions
+ * @class                   ParallelixWrapper
+ */
 class ParallelixWrapper {
     /**
      * Basic Wrapper Constructor
@@ -20,6 +23,9 @@ class ParallelixWrapper {
         this.options = options;
         this.platform = instance;
 
+        // Handled Events
+        this.handledEvents = [];
+
         /* Add Event Handlers */
         this.OnError = (options?.OnError && typeof options?.OnError === "function") ? options.OnError : (error) => {
             console.error(error.message);
@@ -27,6 +33,15 @@ class ParallelixWrapper {
         this.OnInitialized = (options?.OnInitialized && typeof options?.OnInitialized === "function") ? options.OnInitialized : () => {
             console.log();
         };
+    }
+
+    /**
+     * Get Platform Priority
+     * @returns {number} Priority
+     */
+    get Priority(){
+        console.error("Priority is not implemented in the wrapper");
+        return 0;
     }
     
     /**
@@ -53,6 +68,51 @@ class ParallelixWrapper {
     GetLaunchParams(onSuccess, onError){
         console.error("GetLaunchParams is not implemented in the wrapper");
         onError(new Error("GetLaunchParams is not implemented in the wrapper"));
+        return;
+    }
+
+    /**
+     * Add Platform-Specific Event Listener
+     * @param {string} eventName Event Name
+     * @param {Function} eventHandler Event Handler
+     */
+    AddEventListener(eventName, eventHandler = function(data){}){
+        this.handledEvents.push({
+            eventName: eventName,
+            eventHandler: eventHandler
+        });
+        return this;
+    }
+
+    /**
+     * Remove Platform-Specific Event Listener
+     * @param {string} eventName Event Name
+     * @param {Function} eventHandler Event Handler
+     */
+    RemoveEventListener(eventName, eventHandler = function(data){}){
+        this.handledEvents = this.handledEvents.filter(event => event.eventName !== eventName && event.eventHandler !== eventHandler);
+        return this;
+    }
+
+    /**
+     * Get Event Listener
+     * @param {string} eventName Event Name
+     * @returns {Function} Event Handler
+     */
+    GetEventListener(eventName){
+        return this.handledEvents.find(event => event.eventName === eventName);
+    }
+
+    /**
+     * Call Custom Method
+     * @param {string} methodName Method Name
+     * @param {object} params Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CallCustomMethod(methodName, params = {}, onSuccess = function(data){}, onError = function(error){}){
+        console.error("CallCustomMethod is not implemented in the wrapper");
+        onError(new Error("CallCustomMethod is not implemented in the wrapper"));
         return;
     }
 }
@@ -246,7 +306,7 @@ class Parallelix {
      * Get Current Platform Wrapper
      * @returns {Object} Current Platform Wrapper
      */
-    Wrapper() {
+    get Platform() {
         return this.currentPlatform;
     }
 

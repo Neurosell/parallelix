@@ -60,6 +60,7 @@ class ParallelixTelegram extends ParallelixWrapper {
         self.platform.LoadLibrary("https://telegram.org/js/telegram-web-app.js?56", () => {
             self.isInitialized = true;
             self.OnInitialized({});
+            self.HandleEvents();
         }, self.OnError);
     }
 
@@ -106,6 +107,28 @@ class ParallelixTelegram extends ParallelixWrapper {
         }
 
         return isTelegramPlatform;
+    }
+
+    /**
+     * Handle All Telegram Web Apps Events
+     */
+    HandleEvents(){
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !window?.Telegram?.WebApp) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+        
+        // Get All Handled Events
+        const handledEvents = self.handledEvents;
+
+        // Subscribe to All Handled Events
+        for(const event of handledEvents){
+            const { eventName, eventHandler } = event;
+            window.Telegram.WebApp.onEvent(eventName, eventHandler);
+        }
     }
 }
 

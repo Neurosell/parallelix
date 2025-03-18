@@ -54,6 +54,7 @@ class ParallelixWeb extends ParallelixWrapper {
     Initialize(){
         let self = this;
         self.OnInitialized({});
+        self.HandleEvents();
     }
 
     /**
@@ -98,6 +99,27 @@ class ParallelixWeb extends ParallelixWrapper {
         // For the web platform, we always return true
         // because it's the default platform
         return true;
+    }
+
+    /**
+     * Handle All Web Events
+     */
+    HandleEvents(){
+        let self = this;
+
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }   
+
+        // Subscribe to Web App Events
+        window.addEventListener("message", (event) => {
+            if(!event.data) return;
+
+            const { type, data } = event.data;
+            self.GetEventListener(type)?.(data);
+        });
     }
 }
 
