@@ -176,23 +176,6 @@ class ParallelixVK extends ParallelixWrapper {
     }
 
     /**
-     * Toggle Fullscreen on this Platform
-     * @param {boolean} isEnabled Enable or Disable Fullscreen
-     */ 
-    ToggleFullscreen(isEnabled){
-        let self = this;
-
-        // Check if VK Bridge is initialized
-        if(!self.isInitialized) {
-            onError(new Error("VK Bridge is not initialized"));
-            return;
-        }
-
-        // Toggle Fullscreen
-        console.warn("VK Bridge does not support fullscreen toggle mode");
-    }
-
-    /**
      * Add Application to Home Screen
      * @param {Function} onSuccess Success Callback
      * @param {Function} onError Error Callback
@@ -213,6 +196,29 @@ class ParallelixVK extends ParallelixWrapper {
             } else {
                 onError(new Error("Failed to add application to homescreen"));
             }
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Open VK Internal Payment Form
+     * @param {object} parameters Payment Form Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    OpenPaymentForm(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Open Payment Form
+        self.invoker.send('VKWebAppOpenPaymentForm', parameters).then((data) => {
+            onSuccess(data);
         }).catch((error) => {
             onError(error);
         });
@@ -240,6 +246,37 @@ class ParallelixVK extends ParallelixWrapper {
         }).catch((error) => {
             onError(error);
         });
+    }
+
+    /**
+     * Call Custom Bridge Method without params
+     * @param {string} methodName Method Name
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CallCustomMethod(methodName, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Call Custom Method
+        self.invoker.send(methodName).then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Open Link in Current Platform
+     * @param {string} url Link URL
+     */
+    OpenLink(url){
+        window.open(url, "_blank");
     }
 }
 

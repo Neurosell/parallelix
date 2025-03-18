@@ -12,6 +12,7 @@
 
 /**
  * Basic Wrapper Class for Platforms Definitions
+ * Virtual Class for Platforms Definitions
  * @class                   ParallelixWrapper
  */
 class ParallelixWrapper {
@@ -67,8 +68,8 @@ class ParallelixWrapper {
      * @param {Function} onError Error Callback
      */
     GetLaunchParams(onSuccess, onError){
-        console.error("GetLaunchParams is not implemented in the wrapper");
-        onError(new Error("GetLaunchParams is not implemented in the wrapper"));
+        console.error("GetLaunchParams is not implemented for this platform");
+        onError(new Error("GetLaunchParams is not implemented for this platform"));
         return;
     }
 
@@ -110,8 +111,8 @@ class ParallelixWrapper {
      * @param {Function} onError Error Callback
      */
     GetClientInfo(onSuccess = (data) => {}, onError = (error) => {}){
-        console.error("GetClientInfo is not implemented in the wrapper");
-        onError(new Error("GetClientInfo is not implemented in the wrapper"));
+        console.error("GetClientInfo is not implemented for this platform");
+        onError(new Error("GetClientInfo is not implemented for this platform"));
         return;
     }
 
@@ -120,8 +121,8 @@ class ParallelixWrapper {
      * @param {boolean} isEnabled Enable or Disable Fullscreen
      */
     ToggleFullscreen(isEnabled){
-        console.error("ToggleFullscreen is not implemented in the wrapper");
-        onError(new Error("ToggleFullscreen is not implemented in the wrapper"));
+        console.error("ToggleFullscreen is not implemented for this platform");
+        onError(new Error("ToggleFullscreen is not implemented for this platform"));
         return;
     }
 
@@ -131,8 +132,20 @@ class ParallelixWrapper {
      * @param {Function} onError Error Callback
      */
     AddToHomeScreen(onSuccess = (data) => {}, onError = (error) => {}){
-        console.error("AddToHomeScreen is not implemented in the wrapper");
-        onError(new Error("AddToHomeScreen is not implemented in the wrapper"));
+        console.error("AddToHomeScreen is not implemented for this platform");
+        onError(new Error("AddToHomeScreen is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Open Internal Payment Form
+     * @param {object} parameters Payment Form Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    OpenPaymentForm(parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("OpenPaymentForm is not implemented for this platform");
+        onError(new Error("OpenPaymentForm is not implemented for this platform"));
         return;
     }
 
@@ -152,8 +165,30 @@ class ParallelixWrapper {
      * @param {Function} onError Error Callback
      */
     CallCustomMethod(methodName, params = {}, onSuccess = function(data){}, onError = function(error){}){
-        console.error("CallCustomMethod is not implemented in the wrapper");
-        onError(new Error("CallCustomMethod is not implemented in the wrapper"));
+        console.error("CallCustomMethod is not implemented for this platform");
+        onError(new Error("CallCustomMethod is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Call Custom Method
+     * @param {string} methodName Method Name
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CallCustomMethod(methodName, onSuccess = function(data){}, onError = function(error){}){
+        console.error("CallCustomMethod is not implemented for this platform");
+        onError(new Error("CallCustomMethod is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Open Link in Current Platform
+     * @param {string} url Link URL
+     */
+    OpenLink(url){
+        console.error("OpenLink is not implemented for this platform");
+        onError(new Error("OpenLink is not implemented for this platform"));
         return;
     }
 }

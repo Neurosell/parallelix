@@ -196,14 +196,13 @@ class ParallelixTelegram extends ParallelixWrapper {
         });
     }
 
-    /**
-     * Call Custom Telegram Method
-     * @param {string} methodName Telegram Method Name
-     * @param {object} params Method Params
+    /** 
+     * Open Internal Payment Form
+     * @param {string} parameters Payment Form URL
      * @param {Function} onSuccess Success Callback
      * @param {Function} onError Error Callback
      */
-    CallCustomMethod(methodName, params = {}, onSuccess = (data) => {}, onError = (error) => {}){
+    OpenPaymentForm(parameters, onSuccess = (data) => {}, onError = (error) => {}){
         let self = this;
 
         // Check if Telegram SDK is initialized
@@ -212,9 +211,32 @@ class ParallelixTelegram extends ParallelixWrapper {
             return;
         }
 
-        // Call Custom Method
-        console.warn("Telegram does not support custom methods");
-        onError(new Error("Telegram does not support custom methods"));
+        // On Invoice Closed
+        function onInvoiceClosed(){
+            self.RemoveEventListener("invoiceClosed", onInvoiceClosed);
+            onSuccess();
+        }
+
+        // Open Payment Form
+        self.AddEventListener("invoiceClosed", onInvoiceClosed);
+        self.invoker.openInvoice(parameters, onSuccess);
+    }
+
+    /**
+     * Open Link in Current Platform
+     * @param {string} url Link URL
+     */
+    OpenLink(url){
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Open Link
+        self.invoker.openLink(url);
     }
 }
 
