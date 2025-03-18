@@ -115,7 +115,7 @@ class Parallelix {
         self.options.supportedPlatforms.forEach(platform => {
             if(!self.wrappers?.[platform]) {
                 // Load Library
-                self.LoadLibrary(`./client/parallelix.${platform}.js`, () => {
+                self.LoadLibrary(`/libraries/parallelix.${platform}.js`, () => {
                     if(!Parallelix._platformClasses?.[platform]) {
                         self.OnError(new Error(`"${platform}" platform wrapper class is not found.`));
                         return;
