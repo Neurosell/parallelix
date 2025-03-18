@@ -71,6 +71,7 @@ class Parallelix {
         this.platformClasses = {};
         this.wrappers = {};
         this.currentPlatform = null;
+        this.currentPlatformName = null;
         
 
         // Add Event Handlers
@@ -173,6 +174,7 @@ class Parallelix {
         for(let platform in self.wrappers) {    
             if(self.wrappers[platform].IsCurrentPlatform()) {
                 self.currentPlatform = self.wrappers[platform];
+                self.currentPlatformName = platform;
                 break;
             }
         }
@@ -221,6 +223,14 @@ class Parallelix {
      */
     Wrapper() {
         return this.currentPlatform;
+    }
+
+    /**
+     * Get Current Platform Name
+     * @returns {string} Current Platform Name
+     */
+    GetPlatformName(){
+        return this.currentPlatformName;
     }
 
     // Internal Usage Only

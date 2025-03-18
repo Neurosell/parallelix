@@ -21,6 +21,9 @@
             client.OnError = (error) => {
                 console.error(error.message);
             };
+            client.OnInitialized = (data) => {
+                console.log(client.GetPlatformName());
+            };
 
             /* Initialize Application */
             client.Initialize();
