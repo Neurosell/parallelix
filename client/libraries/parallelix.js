@@ -305,9 +305,24 @@ class ParallelixWrapper {
         return;
     }
 
-    // TODO: Close Application
+    /**
+     * Close Application
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CloseApplication(onSuccess = function(data){}, onError = function(error){}){
+        console.error("CloseApplication is not implemented for this platform");
+        onError(new Error("CloseApplication is not implemented for this platform"));
+        return;
+    }
 
-    // TODO: Go Back
+    /**
+     * Go Back
+     */
+    GoBack(){
+        console.error("GoBack is not implemented for this platform");
+        return;
+    }
 }
 
 /**

@@ -318,6 +318,34 @@ class ParallelixTelegram extends ParallelixWrapper {
             result: true
         });
     }
+
+    /**
+     * Close Application
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CloseApplication(onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Close Application
+        self.invoker.close();
+        onSuccess({
+            result: true
+        });
+    }
+    
+    /**
+     * Go Back
+     */
+    GoBack(){
+        window.history.back();
+    }
 }
 
 // Add VK Platform Class to Parallelix

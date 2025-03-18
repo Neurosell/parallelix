@@ -305,6 +305,31 @@ class ParallelixWeb extends ParallelixWrapper {
             result: true
         });
     }
+
+    /**
+     * Close Application
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CloseApplication(onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }
+
+        // Close Application
+        window.close();
+    }
+    
+    /**
+     * Go Back
+     */
+    GoBack(){
+        window.history.back();
+    }
 }
 
 // Add VK Platform Class to Parallelix

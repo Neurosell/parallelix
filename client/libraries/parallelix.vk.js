@@ -442,6 +442,35 @@ class ParallelixVK extends ParallelixWrapper {
             onError(error);
         });
     }
+
+    /**
+     * Close Application
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CloseApplication(onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Close Application
+        self.invoker.send('VKWebAppClose').then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+    
+    /**
+     * Go Back
+     */
+    GoBack(){
+        window.history.back();
+    }
 }
 
 // Add VK Platform Class to Parallelix
