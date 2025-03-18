@@ -323,7 +323,18 @@ class ParallelixWrapper {
         return;
     }
 
-    // TODO: Call API Method
+    /**
+     * Call Custom API Method
+     * @param {string} methodName Method Name
+     * @param {object} parameters Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CallAPI(methodName, parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("CallAPI is not implemented for this platform");
+        onError(new Error("CallAPI is not implemented for this platform"));
+        return;
+    }
 
     /**
      * Open Link in Current Platform

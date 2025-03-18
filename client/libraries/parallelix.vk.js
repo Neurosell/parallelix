@@ -609,6 +609,35 @@ class ParallelixVK extends ParallelixWrapper {
         });
     }
 
+    /**
+     * Call Custom API Method
+     * @param {string} methodName Method Name
+     * @param {object} parameters Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CallAPI(methodName, parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+
+        // Get Method Name
+        parameters.method = methodName;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Call Custom API Method
+        self.invoker.send("VKWebAppCallAPIMethod", parameters).then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
 
     /**
      * Go Back
