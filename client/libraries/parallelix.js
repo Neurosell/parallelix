@@ -25,6 +25,7 @@ class ParallelixWrapper {
 
         // Handled Events
         this.handledEvents = [];
+        this.invoker = null;
 
         /* Add Event Handlers */
         this.OnError = (options?.OnError && typeof options?.OnError === "function") ? options.OnError : (error) => {
@@ -133,6 +134,14 @@ class ParallelixWrapper {
         console.error("AddToHomeScreen is not implemented in the wrapper");
         onError(new Error("AddToHomeScreen is not implemented in the wrapper"));
         return;
+    }
+
+    /**
+     * Get Current Platform Invoker
+     * @returns {object} Invoker
+     */
+    get Invoker(){
+        return this.invoker;
     }
 
     /**
@@ -340,6 +349,14 @@ class Parallelix {
      */
     get Platform() {
         return this.currentPlatform;
+    }
+
+    /**
+     * Get Current Platform Invoker
+     * @returns {Object} Current Platform Invoker
+     */
+    get Invoker(){
+        return this.currentPlatform?.Invoker;
     }
 
     /**

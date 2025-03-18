@@ -27,6 +27,7 @@ class ParallelixWeb extends ParallelixWrapper {
         this.options = extendedOptions;
         this.platform = instance;
         this.isInitialized = false;
+        this.invoker = null;
 
         // Launch Params
         this.launchParams = null;
@@ -69,6 +70,7 @@ class ParallelixWeb extends ParallelixWrapper {
         }
 
         /* Mark as Initialized */
+        self.invoker = self;
         self.isInitialized = true;
         self.OnInitialized({});
         self.HandleEvents();
@@ -206,6 +208,27 @@ class ParallelixWeb extends ParallelixWrapper {
         }else{
             onError(new Error("Your PWA does not contain a manifest file. Specify the manifest file in the wrapper options."));
         }
+    }
+
+    /**
+     * Call Custom Method
+     * @param {string} methodName Method Name
+     * @param {object} params Method Params
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CallCustomMethod(methodName, params = {}, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }
+
+        // Call Custom Method
+        console.warn("Web App does not support custom methods");
+        onError(new Error("Web App does not support custom methods"));
     }
 }
 

@@ -28,6 +28,7 @@ class ParallelixTelegram extends ParallelixWrapper {
         this.options = extendedOptions;
         this.platform = instance;
         this.isInitialized = false;
+        this.invoker = null;
 
         // Launch Params
         this.launchParams = null;
@@ -59,6 +60,7 @@ class ParallelixTelegram extends ParallelixWrapper {
         // Load Telegram Mini Apps SDK Library
         self.platform.LoadLibrary("https://telegram.org/js/telegram-web-app.js?56", () => {
             self.isInitialized = true;
+            self.invoker = window?.Telegram?.WebApp;
             self.OnInitialized({});
             self.HandleEvents();
         }, self.OnError);
@@ -73,15 +75,15 @@ class ParallelixTelegram extends ParallelixWrapper {
         let self = this;
 
         // Check if Telegram SDK is initialized
-        if(!self.isInitialized || !window?.Telegram?.WebApp) {
+        if(!self.isInitialized || !self.invoker) {
             onError(new Error("Telegram SDK is not initialized"));
             return;
         }
 
         try{
             // Get Launch Params
-            self.launchParams = window?.Telegram?.WebApp?.initDataUnsafe;
-            self.launchParamsRaw = window?.Telegram?.WebApp?.initData;
+            self.launchParams = self.invoker?.initDataUnsafe;
+            self.launchParamsRaw = self.invoker?.initData;
             onSuccess(self.launchParams);
         } catch(error) {
             onError(error); 
@@ -116,7 +118,7 @@ class ParallelixTelegram extends ParallelixWrapper {
         let self = this;
 
         // Check if Telegram SDK is initialized
-        if(!self.isInitialized || !window?.Telegram?.WebApp) {
+        if(!self.isInitialized || !self.invoker) {
             onError(new Error("Telegram SDK is not initialized"));
             return;
         }
@@ -140,15 +142,15 @@ class ParallelixTelegram extends ParallelixWrapper {
         let self = this;
 
         // Check if Telegram SDK is initialized
-        if(!self.isInitialized || !window?.Telegram?.WebApp) {
+        if(!self.isInitialized || !self.invoker) {
             onError(new Error("Telegram SDK is not initialized"));
             return;
         }
 
         // Get Client Information
         onSuccess({
-            platform: window?.Telegram?.WebApp?.platform,
-            version: window?.Telegram?.WebApp?.version
+            platform: self.invoker?.platform,
+            version: self.invoker?.version
         });
     }
 
@@ -160,7 +162,7 @@ class ParallelixTelegram extends ParallelixWrapper {
         let self = this;
 
         // Check if Telegram SDK is initialized
-        if(!self.isInitialized || !window?.Telegram?.WebApp) {
+        if(!self.isInitialized || !self.invoker) {
             onError(new Error("Telegram SDK is not initialized"));
             return;
         }
@@ -182,7 +184,7 @@ class ParallelixTelegram extends ParallelixWrapper {
         let self = this;
 
         // Check if Telegram SDK is initialized
-        if(!self.isInitialized || !window?.Telegram?.WebApp) {
+        if(!self.isInitialized || !self.invoker) {
             onError(new Error("Telegram SDK is not initialized"));
             return;
         }
@@ -192,6 +194,27 @@ class ParallelixTelegram extends ParallelixWrapper {
         onSuccess({
             result: true
         });
+    }
+
+    /**
+     * Call Custom Telegram Method
+     * @param {string} methodName Telegram Method Name
+     * @param {object} params Method Params
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CallCustomMethod(methodName, params = {}, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Call Custom Method
+        console.warn("Telegram does not support custom methods");
+        onError(new Error("Telegram does not support custom methods"));
     }
 }
 

@@ -7,7 +7,7 @@
             "sizes": "512x512"
         }
     ],
-    "start_url": "/",
+    "start_url": "/test/",
     "display": "fullscreen",
     "orientation": "portrait"
 }
