@@ -361,7 +361,65 @@ class ParallelixTelegram extends ParallelixWrapper {
         // Show QR Reader
         self.invoker.showScanQrPopup(parameters, onSuccess);
     }
-    
+
+    /**
+     * Request User Phone
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestUserPhone(onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Request User Phone
+        self.invoker.requestContact(onSuccess);
+    }
+
+    /**
+     * Get User Info    
+     * @param {object} parameters User Info Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetUserInfo(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Get Telegram Parameters
+        parameters = parameters?.telegram || {};
+        
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Get User Info
+        onSuccess(self.launchParams.user);
+    }
+
+    /**
+     * Request Location
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestLocation(onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Request Location
+        self.invoker.LocationManager.getLocation(onSuccess);
+    }
+
     /**
      * Go Back
      */

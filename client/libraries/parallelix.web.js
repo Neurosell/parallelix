@@ -307,6 +307,28 @@ class ParallelixWeb extends ParallelixWrapper {
     }
 
     /**
+     * Request Location
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestLocation(onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }
+
+        // Request Location
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        } else {
+            onError(new Error("Geolocation is not supported"));
+        }
+    }
+
+    /**
      * Close Application
      * @param {Function} onSuccess Success Callback
      * @param {Function} onError Error Callback

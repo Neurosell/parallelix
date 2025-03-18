@@ -210,13 +210,13 @@ class ParallelixWrapper {
     }
 
     /**
-     * Get User Email
+     * Request User Email
      * @param {Function} onSuccess Success Callback
      * @param {Function} onError Error Callback
      */
-    GetUserEmail(onSuccess = function(data){}, onError = function(error){}){
-        console.error("GetUserEmail is not implemented for this platform");
-        onError(new Error("GetUserEmail is not implemented for this platform"));
+    RequestUserEmail(onSuccess = function(data){}, onError = function(error){}){
+        console.error("RequestUserEmail is not implemented for this platform");
+        onError(new Error("RequestUserEmail is not implemented for this platform"));
         return;
     }
 
@@ -231,9 +231,28 @@ class ParallelixWrapper {
         return;
     }
 
-    // TODO: Get Phone Number
+    /**
+     * Request User Phone
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestUserPhone(onSuccess = function(data){}, onError = function(error){}){
+        console.error("RequestUserPhone is not implemented for this platform");
+        onError(new Error("RequestUserPhone is not implemented for this platform"));
+        return;
+    }
 
-    // TODO: Get User Info
+    /**
+     * Get User Info
+     * @param {object} parameters User Info Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetUserInfo(parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("GetUserInfo is not implemented for this platform");
+        onError(new Error("GetUserInfo is not implemented for this platform"));
+        return;
+    }
 
     // TODO: Request Auth Token
 
