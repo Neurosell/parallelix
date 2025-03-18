@@ -52,6 +52,10 @@
         <script type="text/javascript">
             /* Initialize Parallelix */
             const client = new Parallelix({
+                baseModulesPath: "/libraries/",
+                supportedPlatforms: ["vk", "telegram"],
+                vk: {},
+                telegram: {}
             });
             client.OnError = (error) => {
                 console.error(error.message);
