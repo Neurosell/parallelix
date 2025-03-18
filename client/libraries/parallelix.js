@@ -243,6 +243,7 @@ class Parallelix {
         const clientVersion = "1.0.0";
         const defaultOptions = {
             // Platforms Defenition
+            baseModulesPath: "/libraries/",                 // Base Modules Path (by default "/libraries/")
             supportedPlatforms: ["vk", "telegram"],         // Supported Platforms Example (by default VK, telegram)
             vk: {},                                         // VK Wrapper Options Example
             telegram: {},                                   // Telegram Wrapper Options Example
@@ -287,7 +288,8 @@ class Parallelix {
         self.options.supportedPlatforms.forEach(platform => {
             if(!self.wrappers?.[platform]) {
                 // Load Library
-                self.LoadLibrary(`/libraries/parallelix.${platform}.js`, () => {
+                let libraryPath = `${self.options.baseModulesPath}parallelix.${platform}.js`;
+                self.LoadLibrary(libraryPath, () => {
                     if(!Parallelix._platformClasses?.[platform]) {
                         self.OnError(new Error(`"${platform}" platform wrapper class is not found.`));
                         return;
