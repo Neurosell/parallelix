@@ -399,7 +399,13 @@ class ParallelixTelegram extends ParallelixWrapper {
         }
 
         // Get User Info
-        onSuccess(self.launchParams.user);
+        if(!self.launchParams || !self.launchParams?.user) {
+            self.GetLaunchParams((data) => {
+                onSuccess(data.user);
+            }, onError);
+        }else{
+            onSuccess(self.launchParams.user);
+        }
     }
 
     /**
