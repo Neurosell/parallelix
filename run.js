@@ -14,6 +14,7 @@
 const express       =       require('express');                         // Express Library
 const limiter       =       require('express-rate-limit');              // Rate Limiter
 const { xss }       =       require('express-xss-sanitizer');           // XSS Filters
+const fs            =       require('fs');                              // File System
 
 /* Initialize Express App */
 const app           =       express();                                  // Express App
@@ -41,7 +42,12 @@ app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
 
-/* Redirect to Client */
+/* Show About Page */
 app.get('/', (req, res) => {
-    res.redirect('/client/index.html');
+    return res.send(fs.readFileSync(__dirname + '/client/index.html', 'utf8'));
+});
+
+/* Show Client Test Page */
+app.get('/test/', (req, res) => {
+    return res.send(fs.readFileSync(__dirname + '/client/test.html', 'utf8'));
 });

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Base Meta Tags -->
+        <meta charset="UTF-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="Welcome to the Parallelix Client Web Application Demo" />
+        <meta name="keywords" content="demo,application,parallelix" />
+        <meta name="author" content="Neurosell" />
+        <meta name="robots" content="index,follow" />
+        <title>Parallelix — Demo Application</title>
+
+        <!-- Open Graph Meta Tags -->
+        <meta property="og:title" content="Parallelix — Demo Application" />
+        <meta property="og:url" content="https://parallelix.nsell.tech/demo/" />
+        <meta property="og:description" content="Welcome to the Parallelix Client Web Application Demo" />
+        <meta property="og:image" content="https://parallelix.nsell.tech/img/ograph.jpg" />
+
+        <!-- Styles and Icons -->
+        <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon" />
+        <link rel="stylesheet" href="/css/main.css" />
+    </head>
+    <body>
+        <!-- Application Test -->
+        <div id="application" class="application">
+            <h1>Parallelix Client Test</h1>
+            <p>Current Platform: <span id="current-platform">...</span></p>
+        </div>
+        <!-- Application Test -->
+
+        <!-- Connect Parallelix -->
+        <script type="text/javascript" src="/libraries/parallelix.js"></script>
+        <script type="text/javascript">
+            /* Initialize Parallelix */
+            const client = new Parallelix({
+                
+            });
+            client.OnError = (error) => {
+                console.error(error.message);
+            };
+            client.OnInitialized = (data) => {
+                console.log(client.GetPlatformName());
+                document.getElementById("current-platform").innerHTML = client.GetPlatformName();
+            };
+
+            /* Initialize Application */
+            client.Initialize();
+        </script>
+        <!-- Connect Parallelix -->
+    </body>
+</html>
