@@ -2,12 +2,14 @@
 <html>
     <head>
         <title>Parallelix Client Test</title>
-        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
     </head>
     <body>
         <!-- Application Test -->
         <div id="application" class="application">
-
+            <h1>Parallelix Client Test</h1>
+            <p>Current Platform: <span id="current-platform">...</span></p>
         </div>
         <!-- Application Test -->
 
@@ -23,6 +25,7 @@
             };
             client.OnInitialized = (data) => {
                 console.log(client.GetPlatformName());
+                document.getElementById("current-platform").innerHTML = client.GetPlatformName();
             };
 
             /* Initialize Application */

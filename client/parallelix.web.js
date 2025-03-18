@@ -1,5 +1,5 @@
 /**
- * Parallelix Telegram Web Apps Wrapper
+ * Parallelix Web Platform Wrapper
  * 
  * @author                  Neurosell
  * @version                 1.0.0
@@ -9,8 +9,7 @@
  * @website                 https://ncommx.com
  * @github                  https://github.com/Neurosell/parallelix
  */
-
-class ParallelixTelegram extends ParallelixWrapper {
+class ParallelixWeb extends ParallelixWrapper {
     /**
      * Basic Wrapper Constructor
      * @param {Parallelix}      instance Parallelix Platform Instance
@@ -31,14 +30,13 @@ class ParallelixTelegram extends ParallelixWrapper {
 
         // Launch Params
         this.launchParams = null;
-        this.launchParamsRaw = null;
 
-        /* Add Event Handlers */
+        // Add Event Handlers
         this.OnError = (options?.OnError && typeof options?.OnError === "function") ? options.OnError : (error) => {
-            console.error(`Parallelix Telegram Wrapper Error: ${error.message}`);
+            console.error(`Parallelix Web Wrapper Error: ${error.message}`);
         };
         this.OnInitialized = (options?.OnInitialized && typeof options?.OnInitialized === "function") ? options.OnInitialized : (data) => {
-            console.log(`Parallelix Telegram Wrapper Initialized`);
+            console.log(`Parallelix Web Wrapper Initialized`);
         };
     }
 
@@ -47,20 +45,15 @@ class ParallelixTelegram extends ParallelixWrapper {
      * @returns {number}
      */
     get Priority(){
-        return 10;
+        return 1000;
     }
 
     /**
-     * Initialize Telegram Wrapper
+     * Initialize Web Wrapper
      */
     Initialize(){
         let self = this;
-
-        // Load Telegram Mini Apps SDK Library
-        self.platform.LoadLibrary("https://telegram.org/js/telegram-web-app.js?56", () => {
-            self.isInitialized = true;
-            self.OnInitialized({});
-        }, self.OnError);
+        self.OnInitialized({});
     }
 
     /**
@@ -71,43 +64,42 @@ class ParallelixTelegram extends ParallelixWrapper {
     GetLaunchParams(onSuccess, onError){
         let self = this;
 
-        // Check if Telegram SDK is initialized
-        if(!self.isInitialized || !window?.Telegram?.WebApp) {
-            onError(new Error("Telegram SDK is not initialized"));
-            return;
-        }
-
         try{
-            // Get Launch Params
-            self.launchParams = window?.Telegram?.WebApp?.initDataUnsafe;
-            self.launchParamsRaw = window?.Telegram?.WebApp?.initData;
-            onSuccess(self.launchParams);
+            // Get Location Arguments to object
+            let locationArgs = {};
+            let location = window.location;
+            let searchParams = new URLSearchParams(location.search);
+            searchParams.forEach((value, key) => {
+                locationArgs[key] = value;
+            });
+            
+            // Get Hash Arguments to object
+            let hashArgs = {};
+            let hash = window.location.hash;
+            let hashParams = new URLSearchParams(hash.substring(1));
+            hashParams.forEach((value, key) => {
+                hashArgs[key] = value;
+            });
+
+            // Merge Location and Hash Arguments
+            let finalArgs = {...locationArgs, ...hashArgs};
+            self.launchParams = finalArgs;
+            onSuccess(finalArgs);
         } catch(error) {
-            onError(error); 
+            onError(error);
         }
     }
-
+    
     /**
      * Check if this wrapper is for current platform
      * @returns {boolean}
      */
     IsCurrentPlatform(){
-        let isTelegramPlatform = false;
-
-        // Check by Telegram Object
-        if(window?.Telegram?.WebApp) {
-            isTelegramPlatform = true;
-        }
-
-        // Check by Hash Launch Params
-        let hash = window.location.hash;
-        if(hash.includes("tgWebAppData")) {
-            isTelegramPlatform = true;
-        }
-
-        return isTelegramPlatform;
+        // For the web platform, we always return true
+        // because it's the default platform
+        return true;
     }
 }
 
 // Add VK Platform Class to Parallelix
-Parallelix._platformClasses["telegram"] = ParallelixTelegram;
+Parallelix._platformClasses["web"] = ParallelixWeb;

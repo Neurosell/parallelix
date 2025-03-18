@@ -16,8 +16,9 @@ class ParallelixWrapper {
      * Basic Wrapper Constructor
      * @param {object} options 
      */
-    constructor(options = {}) {
+    constructor(instance, options = {}) {
         this.options = options;
+        this.platform = instance;
 
         /* Add Event Handlers */
         this.OnError = (options?.OnError && typeof options?.OnError === "function") ? options.OnError : (error) => {
@@ -40,7 +41,19 @@ class ParallelixWrapper {
      * @returns {boolean}
      */
     IsCurrentPlatform(){
+        console.error("IsCurrentPlatform is not implemented in the wrapper");
         return false;
+    }
+
+    /**
+     * Get Platform Launch Params
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetLaunchParams(onSuccess, onError){
+        console.error("GetLaunchParams is not implemented in the wrapper");
+        onError(new Error("GetLaunchParams is not implemented in the wrapper"));
+        return;
     }
 }
 
@@ -73,6 +86,10 @@ class Parallelix {
         this.currentPlatform = null;
         this.currentPlatformName = null;
         
+        // Check the web platform is added to supported platforms
+        if(!this.options?.supportedPlatforms?.includes("web")) {
+            this.options?.supportedPlatforms?.push("web");
+        }
 
         // Add Event Handlers
         this.OnError = (options?.OnError && typeof options?.OnError === "function") ? options.OnError : (error) => {
@@ -83,6 +100,7 @@ class Parallelix {
         };
 
         console.log(`Welcome to Parallelix Client Library (Version: v${clientVersion})`);
+        console.log(`Initializing Parallelix for Platforms: ${this.options?.supportedPlatforms?.join(", ")}`);
     }
 
     /**
@@ -104,7 +122,8 @@ class Parallelix {
                     }
 
                     let wrapperConfig = (self?.options?.[platform] && typeof self?.options?.[platform] === "object") ? self?.options?.[platform] : {};
-                    self.wrappers[platform] = new Parallelix._platformClasses[platform](wrapperConfig);
+                    self.wrappers[platform] = new Parallelix._platformClasses[platform](self, wrapperConfig);
+                    self.wrappers[platform].name = platform;
                     platformsCount--;
                     console.log(`"${platform}" platform wrapper connected.`);
                     if (platformsCount === 0) {
@@ -166,15 +185,20 @@ class Parallelix {
     }
 
     /**
-     * Detect Current Platform
-     * and initialize wrapper
+     * Detect Current Platform using wrappers method
+     * by priority
      */
     DetectPlatform() {
         let self = this;
-        for(let platform in self.wrappers) {    
-            if(self.wrappers[platform].IsCurrentPlatform()) {
-                self.currentPlatform = self.wrappers[platform];
-                self.currentPlatformName = platform;
+
+        // Sort wrappers by priority
+        let sortedWrappers = Object.values(self.wrappers).sort((a, b) => a.Priority - b.Priority);
+
+        // Detect current platform
+        for(let wrapper of sortedWrappers) {
+            if(wrapper.IsCurrentPlatform()) {
+                self.currentPlatform = wrapper;
+                self.currentPlatformName = wrapper.name;
                 break;
             }
         }
@@ -182,6 +206,7 @@ class Parallelix {
 
     /**
      * Initialize Parallelix Library
+     * connect wrappers and load specific libraries
      */
     Initialize() {
         let self = this;
