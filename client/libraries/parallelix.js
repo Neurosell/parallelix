@@ -150,6 +150,42 @@ class ParallelixWrapper {
     }
 
     /**
+     * Add Application to Favorites
+     * @param {object} parameters Application Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AddToFavorites(parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("AddToFavorites is not implemented for this platform");
+        onError(new Error("AddToFavorites is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Share Application
+     * @param {object} parameters Share Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    ShareApplication(parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("ShareApplication is not implemented for this platform");
+        onError(new Error("ShareApplication is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Publish Story
+     * @param {object} parameters Story Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    PublishStory(parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("PublishStory is not implemented for this platform"); 
+        onError(new Error("PublishStory is not implemented for this platform"));
+        return;
+    }
+
+    /**
      * Get Current Platform Invoker
      * @returns {object} Invoker
      */

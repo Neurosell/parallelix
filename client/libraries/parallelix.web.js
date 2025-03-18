@@ -211,6 +211,41 @@ class ParallelixWeb extends ParallelixWrapper {
     }
 
     /**
+     * Add Application to Favorites
+     * @param {object} parameters Application Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AddToFavorites(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }
+
+        // Add Application to Favorites
+        try{
+            if ('sidebar' in window && 'addPanel' in window.sidebar) { 
+                window.sidebar.addPanel(location.href,document.title,"");
+                onSuccess({
+                    result: true
+                });
+            } else if( /*@cc_on!@*/false) {
+                window.external.AddFavorite(location.href,document.title);
+                onSuccess({
+                    result: true
+                });
+            }else{
+                onError(new Error("Your browser does not support adding to favorites"));
+            }
+        } catch(error) {
+            onError(error);
+        }
+    }
+
+    /**
      * Open Link in Current Platform
      * @param {string} url Link URL
      */

@@ -272,6 +272,53 @@ class ParallelixVK extends ParallelixWrapper {
     }
 
     /**
+     * Add Application to Favorites
+     * @param {object} parameters Application Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AddToFavorites(parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+        
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+        
+        // Add Application to Favorites
+        self.invoker.send('VKWebAppAddToFavorites').then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Share Application
+     * @param {object} parameters Share Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    ShareApplication(parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+        
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+        
+        // Share Application
+        self.invoker.send('VKWebAppAddToFavorites').then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+    
+
+    /**
      * Open Link in Current Platform
      * @param {string} url Link URL
      */
