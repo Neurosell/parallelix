@@ -1,5 +1,5 @@
 # Parallelix JS
-<img src="https://github.com/Neurosell/parallelix/develop/blob/wiki_visuals/Header.png?raw=true" alt="Parallelix JS - cross-platform web-app library for client initialization" style="width: 100%" /><br/>
+<img src="https://github.com/Neurosell/parallelix/blob/develop/wiki_visuals/Header.png?raw=true" alt="Parallelix JS - cross-platform web-app library for client initialization" style="width: 100%" /><br/>
 Welcome to the **Parallelix JS** - the main page of the library repository for cross-platform web applications. **Parallelix** - a library for web applications that provides unified access to APIs of various platforms you plan to work with (VK API, Telegram Web Apps and other platforms).
 
 ❓**Why Parallelix?**
@@ -28,4 +28,4 @@ Welcome to the **Parallelix JS** - the main page of the library repository for c
   <tr><td>USDT (TRC20)</td><td>TMR3ZqeXSGgTjqrRtgNBvZRGFKrKHBcNHT</td></tr>
 </table>
 
-![Neurosell Libraries](https://github.com/Neurosell/parallelix/develop/blob/wiki_visuals/Footer.png?raw=true)
+![Neurosell Libraries](https://github.com/Neurosell/parallelix/blob/develop/wiki_visuals/Footer.png?raw=true)
