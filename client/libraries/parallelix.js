@@ -254,7 +254,17 @@ class ParallelixWrapper {
         return;
     }
 
-    // TODO: Request Auth Token
+    /**
+     * Request Auth Token
+     * @param {object} parameters Auth Token Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestAuthToken(parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("RequestAuthToken is not implemented for this platform");
+        onError(new Error("RequestAuthToken is not implemented for this platform"));
+        return;
+    }
 
     /**
      * Get Storage

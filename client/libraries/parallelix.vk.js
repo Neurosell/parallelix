@@ -584,6 +584,33 @@ class ParallelixVK extends ParallelixWrapper {
     }
 
     /**
+     * Req  uest Auth Token
+     * @param {object} parameters Auth Token Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestAuthToken(parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }   
+
+        // Request Auth Token
+        self.invoker.send('VKWebAppGetAuthToken', parameters).then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+
+    /**
      * Go Back
      */
     GoBack(){
