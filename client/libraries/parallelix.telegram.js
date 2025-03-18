@@ -205,6 +205,9 @@ class ParallelixTelegram extends ParallelixWrapper {
     OpenPaymentForm(parameters, onSuccess = (data) => {}, onError = (error) => {}){
         let self = this;
 
+        // Get Telegram Parameters
+        parameters = parameters?.telegram || {};
+
         // Check if Telegram SDK is initialized
         if(!self.isInitialized || !self.invoker) {
             onError(new Error("Telegram SDK is not initialized"));

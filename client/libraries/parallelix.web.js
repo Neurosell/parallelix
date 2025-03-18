@@ -219,6 +219,9 @@ class ParallelixWeb extends ParallelixWrapper {
     AddToFavorites(parameters, onSuccess = (data) => {}, onError = (error) => {}){
         let self = this;
 
+        // Get Web Parameters
+        parameters = parameters?.web || {};
+
         // Check if Web App is initialized
         if(!self.isInitialized) {
             onError(new Error("Web App is not initialized"));

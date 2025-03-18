@@ -210,6 +210,9 @@ class ParallelixVK extends ParallelixWrapper {
     OpenPaymentForm(parameters, onSuccess = (data) => {}, onError = (error) => {}){
         let self = this;
 
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+
         // Check if VK Bridge is initialized
         if(!self.isInitialized) {
             onError(new Error("VK Bridge is not initialized"));
@@ -233,6 +236,9 @@ class ParallelixVK extends ParallelixWrapper {
      */
     CallCustomMethod(methodName, params = {}, onSuccess = (data) => {}, onError = (error) => {}){
         let self = this;
+
+        // Get VK Parameters
+        params = params?.vk || {};
 
         // Check if VK Bridge is initialized
         if(!self.isInitialized) {
@@ -279,7 +285,10 @@ class ParallelixVK extends ParallelixWrapper {
      */
     AddToFavorites(parameters, onSuccess = function(data){}, onError = function(error){}){
         let self = this;
-        
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+
         // Check if VK Bridge is initialized
         if(!self.isInitialized) {
             onError(new Error("VK Bridge is not initialized"));
@@ -302,7 +311,10 @@ class ParallelixVK extends ParallelixWrapper {
      */
     ShareApplication(parameters, onSuccess = function(data){}, onError = function(error){}){
         let self = this;
-        
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+
         // Check if VK Bridge is initialized
         if(!self.isInitialized) {
             onError(new Error("VK Bridge is not initialized"));
