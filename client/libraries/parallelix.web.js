@@ -121,6 +121,29 @@ class ParallelixWeb extends ParallelixWrapper {
             self.GetEventListener(type)?.(data);
         });
     }
+
+    /**
+     * Get Client Information
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetClientInfo(onSuccess, onError){
+        let self = this;
+
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }
+
+        // Get Client Information
+        onSuccess({
+            platform: "web",
+            version: "1.0.0",
+            userAgent: navigator.userAgent,
+            userAgentData: navigator.userAgentData,
+        });
+    }
 }
 
 // Add VK Platform Class to Parallelix

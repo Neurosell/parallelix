@@ -130,6 +130,27 @@ class ParallelixTelegram extends ParallelixWrapper {
             window.Telegram.WebApp.onEvent(eventName, eventHandler);
         }
     }
+
+    /**
+     * Get Client Information
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetClientInfo(onSuccess, onError){
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !window?.Telegram?.WebApp) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Get Client Information
+        onSuccess({
+            platform: window?.Telegram?.WebApp?.platform,
+            version: window?.Telegram?.WebApp?.version
+        });
+    }
 }
 
 // Add VK Platform Class to Parallelix

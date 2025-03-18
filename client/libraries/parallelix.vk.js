@@ -146,6 +146,32 @@ class ParallelixVK extends ParallelixWrapper {
             self.GetEventListener(type)?.(data);
         });
     }
+
+    /**
+     * Get Client Information
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetClientInfo(onSuccess, onError){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Get Client Version
+        vkBridge.send('VKWebAppGetClientVersion').then((data) => {
+            if (data.platform) {
+                onSuccess(data);
+            } else {
+                onError(new Error("Unknown VK Bridge Client Version: " + JSON.stringify(data)));
+            }
+        }).catch((error) => {
+            onError(error);
+        });
+    }
 }
 
 // Add VK Platform Class to Parallelix

@@ -104,6 +104,17 @@ class ParallelixWrapper {
     }
 
     /**
+     * Get Client Information
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetClientInfo(onSuccess, onError){
+        console.error("GetClientInfo is not implemented in the wrapper");
+        onError(new Error("GetClientInfo is not implemented in the wrapper"));
+        return;
+    }
+
+    /**
      * Call Custom Method
      * @param {string} methodName Method Name
      * @param {object} params Parameters
