@@ -1,0 +1,348 @@
+/* Import Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/* Global Styles */
+*, body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    max-width: 100%;
+    position: relative;
+}
+
+/* Body Styles */
+body {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    background-color: #29013f;
+    color: #ffffff;
+    font-size: 15px;
+}
+
+h1{
+    font-size: 24px;
+    font-weight: 600;
+}
+
+h2{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+h3{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+h4{
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.material-symbols-rounded {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 100,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+/* Application Styles */
+.application {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+/* Content Styles */
+.content {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    width: 100%;
+    max-width: 968px;
+    padding: 20px;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+    gap: 20px;
+}
+
+.grid-element {
+    flex: 1;
+}
+
+/* link style */
+.link {
+    color: #ff00de;
+    text-decoration: none;
+}
+
+/* Card Styles */
+.card {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    background-color: #452258;
+    border-radius: 10px;
+    overflow: hidden;
+    flex: 1;
+    min-width: 350px;
+}
+
+.card.small {
+    width: auto;
+    max-width: 250px;
+    min-width: 170px;
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    padding: 20px;
+}
+
+.card.centred {
+    align-items: center;
+    justify-content: center;
+}
+
+.card.centred .card-content {
+    align-items: center;
+    justify-content: center;
+}
+
+.card-footer {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    gap: 10px;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card.welcome {
+    background-color: #fff;
+}
+
+.card.welcome h1{
+    color: #29013f;
+    margin-bottom: 10px;
+}
+
+.card.welcome p{
+    color: #29013f;
+}
+
+.card-content .material-symbols-rounded {
+    font-size: 48px;
+}
+
+/* Button Styles */
+.button {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 15px !important;
+    display: flex;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.button.dark {
+    background-color: #29013f;
+    border: 1px solid transparent;
+    color: #fff;
+}
+
+.button.dark.alt {
+    border: 1px solid #29013f;
+    color: #29013f;
+    background-color: transparent;
+}
+
+
+/* Preloader Styles */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    background-color: #180025;
+}
+
+.preloader-content {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+    max-width: 100%;
+    justify-content: space-between;
+    padding: 20px;
+    height: 100%;
+    gap: 10px;
+}
+
+.preloader-logo {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex: 1;
+}
+
+.preloader-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-width: 300px;
+}
+
+.preloader-text {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.preloader-spinner {
+    position: relative;
+    display: flex;
+    width: 120px;
+    height: 60px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader {
+    width: 108px;
+    height: 16px;
+    background:
+      radial-gradient(circle 8px at 8px center, #FFF 100%, transparent 0),
+      radial-gradient(circle 8px at 8px center, #FFF 100%, transparent 0);
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    position: relative;
+    animation: ballX 1s linear infinite;
+}
+
+.loader:before {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background:#FFF;
+    inset:0;
+    margin:auto;
+    animation: moveX 1s cubic-bezier(0.5,300,0.5,-300) infinite;
+}
+  
+@keyframes ballX {
+    0%,25%,50%,75%, 100%  {background-position: 25% 0,75% 0}
+    40%     {background-position: 25% 0,85% 0}
+    90%     {background-position: 15% 0,75% 0}
+}
+  
+@keyframes moveX {
+    100% {transform:translate(0.15px)}
+}
+
+/* Utils */
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.mb-0 {
+    margin-bottom: 0;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.mb-30 {
+    margin-bottom: 30px;
+}
+
+.mb-40 {
+    margin-bottom: 40px;
+}
+
+.mt-0 {
+    margin-top: 0;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mt-30 {
+    margin-top: 30px;
+}
+
+.mt-40 {
+    margin-top: 40px;
+}
+
+.full-width {
+    width: 100%;
+}
