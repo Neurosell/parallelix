@@ -136,7 +136,7 @@ class ParallelixTelegram extends ParallelixWrapper {
      * @param {Function} onSuccess Success Callback
      * @param {Function} onError Error Callback
      */
-    GetClientInfo(onSuccess, onError){
+    GetClientInfo(onSuccess = (data) => {}, onError = (error) => {}){
         let self = this;
 
         // Check if Telegram SDK is initialized
@@ -149,6 +149,48 @@ class ParallelixTelegram extends ParallelixWrapper {
         onSuccess({
             platform: window?.Telegram?.WebApp?.platform,
             version: window?.Telegram?.WebApp?.version
+        });
+    }
+
+    /**
+     * Toggle Fullscreen for Telegram Web Apps
+     * @param {boolean} isEnabled Enable or Disable Fullscreen
+     */
+    ToggleFullscreen(isEnabled) {
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !window?.Telegram?.WebApp) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Toggle Fullscreen
+        if(isEnabled) {
+            window.Telegram.WebApp.requestFullscreen();
+        } else {
+            window.Telegram.WebApp.exitFullscreen();
+        }
+    }
+
+    /**
+     * Add Application to Home Screen
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AddToHomeScreen(onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !window?.Telegram?.WebApp) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Add Application to Home Screen
+        window.Telegram.WebApp.addToHomeScreen();
+        onSuccess({
+            result: true
         });
     }
 }

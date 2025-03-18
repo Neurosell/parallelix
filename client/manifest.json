@@ -1,0 +1,13 @@
+{
+    "name": "Parallelix Demo",
+    "icons": [
+        {
+            "src": "img/pwa_icon.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "/",
+    "display": "fullscreen",
+    "orientation": "portrait"
+}

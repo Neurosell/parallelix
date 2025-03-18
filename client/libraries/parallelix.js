@@ -108,9 +108,30 @@ class ParallelixWrapper {
      * @param {Function} onSuccess Success Callback
      * @param {Function} onError Error Callback
      */
-    GetClientInfo(onSuccess, onError){
+    GetClientInfo(onSuccess = (data) => {}, onError = (error) => {}){
         console.error("GetClientInfo is not implemented in the wrapper");
         onError(new Error("GetClientInfo is not implemented in the wrapper"));
+        return;
+    }
+
+    /**
+     * Toggle Fullscreen on this Platform
+     * @param {boolean} isEnabled Enable or Disable Fullscreen
+     */
+    ToggleFullscreen(isEnabled){
+        console.error("ToggleFullscreen is not implemented in the wrapper");
+        onError(new Error("ToggleFullscreen is not implemented in the wrapper"));
+        return;
+    }
+
+    /**
+     * Add Application to Home Screen
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AddToHomeScreen(onSuccess = (data) => {}, onError = (error) => {}){
+        console.error("AddToHomeScreen is not implemented in the wrapper");
+        onError(new Error("AddToHomeScreen is not implemented in the wrapper"));
         return;
     }
 

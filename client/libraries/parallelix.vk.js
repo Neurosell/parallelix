@@ -152,7 +152,7 @@ class ParallelixVK extends ParallelixWrapper {
      * @param {Function} onSuccess Success Callback
      * @param {Function} onError Error Callback
      */
-    GetClientInfo(onSuccess, onError){
+    GetClientInfo(onSuccess = (data) => {}, onError = (error) => {}){
         let self = this;
 
         // Check if VK Bridge is initialized
@@ -167,6 +167,49 @@ class ParallelixVK extends ParallelixWrapper {
                 onSuccess(data);
             } else {
                 onError(new Error("Unknown VK Bridge Client Version: " + JSON.stringify(data)));
+            }
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Toggle Fullscreen on this Platform
+     * @param {boolean} isEnabled Enable or Disable Fullscreen
+     */ 
+    ToggleFullscreen(isEnabled){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Toggle Fullscreen
+        console.warn("VK Bridge does not support fullscreen toggle mode");
+    }
+
+    /**
+     * Add Application to Home Screen
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AddToHomeScreen(onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Add Application to Home Screen
+        vkBridge.send('VKWebAppAddToHomeScreen').then((data) => {
+            if (data.result) {
+                onSuccess(data);
+            } else {
+                onError(new Error("Failed to add application to homescreen"));
             }
         }).catch((error) => {
             onError(error);
