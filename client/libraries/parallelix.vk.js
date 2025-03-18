@@ -28,6 +28,7 @@ class ParallelixVK extends ParallelixWrapper {
         this.options = extendedOptions;
         this.platform = instance;
         this.isInitialized = false;
+        this.invoker = null;
 
         // Launch Params
         this.launchParams = null;
@@ -58,10 +59,12 @@ class ParallelixVK extends ParallelixWrapper {
         // Load VK Bridge Library
         self.platform.LoadLibrary("https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js", () => {
             // Initialize VK Bridge
-            vkBridge.send('VKWebAppInit').then((data) => { 
+            self.invoker = vkBridge;
+            self.invoker.send('VKWebAppInit').then((data) => { 
                 if (data.result) {
                     self.isInitialized = true;
                     self.OnInitialized(data);
+                    self.HandleEvents();
                 } else {
                     self.OnError(new Error("VK Bridge initialization failed"));
                 }
@@ -86,7 +89,7 @@ class ParallelixVK extends ParallelixWrapper {
         }
 
         // Get Launch Params
-        vkBridge.send('VKWebAppGetLaunchParams').then((data) => { 
+        self.invoker.send('VKWebAppGetLaunchParams').then((data) => { 
             if (data.vk_app_id) {
                 self.launchParams = data;
                 onSuccess(data);
@@ -123,6 +126,204 @@ class ParallelixVK extends ParallelixWrapper {
         }
 
         return isVKPlatform;
+    }
+
+    /**
+     * Handle All VK Bridge Events
+     */
+    HandleEvents(){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Subscribe to VK Bridge Events
+        self.invoker.subscribe((event) => {
+            if(!event.detail) return;
+
+            const { type, data } = event.detail;
+            self.GetEventListener(type)?.(data);
+        });
+    }
+
+    /**
+     * Get Client Information
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetClientInfo(onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Get Client Version
+        self.invoker.send('VKWebAppGetClientVersion').then((data) => {
+            if (data.platform) {
+                onSuccess(data);
+            } else {
+                onError(new Error("Unknown VK Bridge Client Version: " + JSON.stringify(data)));
+            }
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Add Application to Home Screen
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AddToHomeScreen(onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Add Application to Home Screen
+        self.invoker.send('VKWebAppAddToHomeScreen').then((data) => {
+            if (data.result) {
+                onSuccess(data);
+            } else {
+                onError(new Error("Failed to add application to homescreen"));
+            }
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Open VK Internal Payment Form
+     * @param {object} parameters Payment Form Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    OpenPaymentForm(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Open Payment Form
+        self.invoker.send('VKWebAppOpenPaymentForm', parameters).then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Call Custom Bridge Method
+     * @param {string} methodName VK Bridge Method Name
+     * @param {object} params Method Params
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CallCustomMethod(methodName, params = {}, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Call Custom Method
+        self.invoker.send(methodName, params).then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Call Custom Bridge Method without params
+     * @param {string} methodName Method Name
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CallCustomMethod(methodName, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Call Custom Method
+        self.invoker.send(methodName).then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Add Application to Favorites
+     * @param {object} parameters Application Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AddToFavorites(parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+        
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+        
+        // Add Application to Favorites
+        self.invoker.send('VKWebAppAddToFavorites').then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Share Application
+     * @param {object} parameters Share Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    ShareApplication(parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+        
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+        
+        // Share Application
+        self.invoker.send('VKWebAppAddToFavorites').then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+    
+
+    /**
+     * Open Link in Current Platform
+     * @param {string} url Link URL
+     */
+    OpenLink(url){
+        window.open(url, "_blank");
     }
 }
 

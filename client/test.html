@@ -20,9 +20,26 @@
 
         <!-- Styles and Icons -->
         <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
         <link rel="stylesheet" href="/css/main.css" />
     </head>
     <body>
+        <!-- Preloader Container -->
+        <div id="preloader" class="preloader">
+            <div class="preloader-content">
+                <div class="preloader-logo">
+                    <img src="/img/logo.svg" alt="Parallelix Logo" />
+                </div>
+                <div class="preloader-spinner">
+                    <span class="loader"></span>
+                </div>
+                <div class="preloader-text">
+                    <p>Please, wait...</p>
+                </div>
+            </div>
+        </div>
+        <!-- Preloader Container -->
+
         <!-- Application Test -->
         <div id="application" class="application">
             <h1>Parallelix Client Test</h1>
@@ -35,18 +52,35 @@
         <script type="text/javascript">
             /* Initialize Parallelix */
             const client = new Parallelix({
-                
             });
             client.OnError = (error) => {
                 console.error(error.message);
             };
             client.OnInitialized = (data) => {
                 console.log(client.GetPlatformName());
+                console.log(client.Platform);
                 document.getElementById("current-platform").innerHTML = client.GetPlatformName();
+                hidePreloader();
             };
 
             /* Initialize Application */
             client.Initialize();
+
+            /* Hide Application Preloader */
+            function hidePreloader() {
+                var fadeTarget = document.getElementById("preloader");
+                var fadeEffect = setInterval(function () {
+                    if (!fadeTarget.style.opacity) {
+                        fadeTarget.style.opacity = 1;
+                    }
+                    if (fadeTarget.style.opacity > 0) {
+                        fadeTarget.style.opacity -= 0.1;
+                    } else {
+                        clearInterval(fadeEffect);
+                        fadeTarget.style.display = "none";
+                    }
+                }, 20);
+            }
         </script>
         <!-- Connect Parallelix -->
     </body>

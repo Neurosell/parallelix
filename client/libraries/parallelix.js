@@ -10,7 +10,11 @@
  * @github                  https://github.com/Neurosell/parallelix
  */
 
-/* Basic Wrapper Class */
+/**
+ * Basic Wrapper Class for Platforms Definitions
+ * Virtual Class for Platforms Definitions
+ * @class                   ParallelixWrapper
+ */
 class ParallelixWrapper {
     /**
      * Basic Wrapper Constructor
@@ -20,6 +24,10 @@ class ParallelixWrapper {
         this.options = options;
         this.platform = instance;
 
+        // Handled Events
+        this.handledEvents = [];
+        this.invoker = null;
+
         /* Add Event Handlers */
         this.OnError = (options?.OnError && typeof options?.OnError === "function") ? options.OnError : (error) => {
             console.error(error.message);
@@ -27,6 +35,15 @@ class ParallelixWrapper {
         this.OnInitialized = (options?.OnInitialized && typeof options?.OnInitialized === "function") ? options.OnInitialized : () => {
             console.log();
         };
+    }
+
+    /**
+     * Get Platform Priority
+     * @returns {number} Priority
+     */
+    get Priority(){
+        console.error("Priority is not implemented in the wrapper");
+        return 0;
     }
     
     /**
@@ -51,8 +68,163 @@ class ParallelixWrapper {
      * @param {Function} onError Error Callback
      */
     GetLaunchParams(onSuccess, onError){
-        console.error("GetLaunchParams is not implemented in the wrapper");
-        onError(new Error("GetLaunchParams is not implemented in the wrapper"));
+        console.error("GetLaunchParams is not implemented for this platform");
+        onError(new Error("GetLaunchParams is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Add Platform-Specific Event Listener
+     * @param {string} eventName Event Name
+     * @param {Function} eventHandler Event Handler
+     */
+    AddEventListener(eventName, eventHandler = function(data){}){
+        this.handledEvents.push({
+            eventName: eventName,
+            eventHandler: eventHandler
+        });
+        return this;
+    }
+
+    /**
+     * Remove Platform-Specific Event Listener
+     * @param {string} eventName Event Name
+     * @param {Function} eventHandler Event Handler
+     */
+    RemoveEventListener(eventName, eventHandler = function(data){}){
+        this.handledEvents = this.handledEvents.filter(event => event.eventName !== eventName && event.eventHandler !== eventHandler);
+        return this;
+    }
+
+    /**
+     * Get Event Listener
+     * @param {string} eventName Event Name
+     * @returns {Function} Event Handler
+     */
+    GetEventListener(eventName){
+        return this.handledEvents.find(event => event.eventName === eventName);
+    }
+
+    /**
+     * Get Client Information
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetClientInfo(onSuccess = (data) => {}, onError = (error) => {}){
+        console.error("GetClientInfo is not implemented for this platform");
+        onError(new Error("GetClientInfo is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Toggle Fullscreen on this Platform
+     * @param {boolean} isEnabled Enable or Disable Fullscreen
+     */
+    ToggleFullscreen(isEnabled){
+        console.error("ToggleFullscreen is not implemented for this platform");
+        onError(new Error("ToggleFullscreen is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Add Application to Home Screen
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AddToHomeScreen(onSuccess = (data) => {}, onError = (error) => {}){
+        console.error("AddToHomeScreen is not implemented for this platform");
+        onError(new Error("AddToHomeScreen is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Open Internal Payment Form
+     * @param {object} parameters Payment Form Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    OpenPaymentForm(parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("OpenPaymentForm is not implemented for this platform");
+        onError(new Error("OpenPaymentForm is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Add Application to Favorites
+     * @param {object} parameters Application Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AddToFavorites(parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("AddToFavorites is not implemented for this platform");
+        onError(new Error("AddToFavorites is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Share Application
+     * @param {object} parameters Share Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    ShareApplication(parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("ShareApplication is not implemented for this platform");
+        onError(new Error("ShareApplication is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Publish Story
+     * @param {object} parameters Story Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    PublishStory(parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("PublishStory is not implemented for this platform"); 
+        onError(new Error("PublishStory is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Get Current Platform Invoker
+     * @returns {object} Invoker
+     */
+    get Invoker(){
+        return this.invoker;
+    }
+
+    /**
+     * Call Custom Method
+     * @param {string} methodName Method Name
+     * @param {object} params Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CallCustomMethod(methodName, params = {}, onSuccess = function(data){}, onError = function(error){}){
+        console.error("CallCustomMethod is not implemented for this platform");
+        onError(new Error("CallCustomMethod is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Call Custom Method
+     * @param {string} methodName Method Name
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CallCustomMethod(methodName, onSuccess = function(data){}, onError = function(error){}){
+        console.error("CallCustomMethod is not implemented for this platform");
+        onError(new Error("CallCustomMethod is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Open Link in Current Platform
+     * @param {string} url Link URL
+     */
+    OpenLink(url){
+        console.error("OpenLink is not implemented for this platform");
+        onError(new Error("OpenLink is not implemented for this platform"));
         return;
     }
 }
@@ -246,8 +418,16 @@ class Parallelix {
      * Get Current Platform Wrapper
      * @returns {Object} Current Platform Wrapper
      */
-    Wrapper() {
+    get Platform() {
         return this.currentPlatform;
+    }
+
+    /**
+     * Get Current Platform Invoker
+     * @returns {Object} Current Platform Invoker
+     */
+    get Invoker(){
+        return this.currentPlatform?.Invoker;
     }
 
     /**

@@ -18,7 +18,7 @@ class ParallelixWeb extends ParallelixWrapper {
     constructor(instance, options = {}) {
         /* Base Wrapper Options */
         const defaultOptions = {
-
+            manifest: "/manifest.json",
         };
 
         // Extend Wrapper Options
@@ -27,9 +27,11 @@ class ParallelixWeb extends ParallelixWrapper {
         this.options = extendedOptions;
         this.platform = instance;
         this.isInitialized = false;
+        this.invoker = null;
 
         // Launch Params
         this.launchParams = null;
+        this._beforeInstallPromptEvent = null;
 
         // Add Event Handlers
         this.OnError = (options?.OnError && typeof options?.OnError === "function") ? options.OnError : (error) => {
@@ -53,7 +55,25 @@ class ParallelixWeb extends ParallelixWrapper {
      */
     Initialize(){
         let self = this;
+
+        /* Connect Application Manifest */
+        if(self.options.manifest) {
+            let manifest = document.createElement("link");
+            manifest.rel = "manifest";
+            manifest.href = self.options.manifest;
+            document.head.appendChild(manifest);
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                self._beforeInstallPromptEvent = e;
+            });
+        }
+
+        /* Mark as Initialized */
+        self.invoker = self;
+        self.isInitialized = true;
         self.OnInitialized({});
+        self.HandleEvents();
     }
 
     /**
@@ -98,6 +118,139 @@ class ParallelixWeb extends ParallelixWrapper {
         // For the web platform, we always return true
         // because it's the default platform
         return true;
+    }
+
+    /**
+     * Handle All Web Events
+     */
+    HandleEvents(){
+        let self = this;
+
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }   
+
+        // Subscribe to Web App Events
+        window.addEventListener("message", (event) => {
+            if(!event.data) return;
+
+            const { type, data } = event.data;
+            self.GetEventListener(type)?.(data);
+        });
+    }
+
+    /**
+     * Get Client Information
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetClientInfo(onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }
+
+        // Get Client Information
+        onSuccess({
+            platform: "web",
+            version: "1.0.0",
+            userAgent: navigator.userAgent,
+            userAgentData: navigator.userAgentData,
+        });
+    }
+
+    /**
+     * Toggle Fullscreen on this Platform
+     * @param {boolean} isEnabled Enable or Disable Fullscreen
+     */
+    ToggleFullscreen(isEnabled){
+        let self = this;
+
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }
+
+        // Toggle Fullscreen
+        if(isEnabled) {
+            document.documentElement.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    /**
+     * Add Application to Home Screen
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AddToHomeScreen(onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }
+
+        // Add Web App to Home Screen
+        if(self._beforeInstallPromptEvent) {
+            self._beforeInstallPromptEvent.prompt();
+            onSuccess({
+                result: true
+            });
+        }else{
+            onError(new Error("Your PWA does not contain a manifest file. Specify the manifest file in the wrapper options."));
+        }
+    }
+
+    /**
+     * Add Application to Favorites
+     * @param {object} parameters Application Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AddToFavorites(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }
+
+        // Add Application to Favorites
+        try{
+            if ('sidebar' in window && 'addPanel' in window.sidebar) { 
+                window.sidebar.addPanel(location.href,document.title,"");
+                onSuccess({
+                    result: true
+                });
+            } else if( /*@cc_on!@*/false) {
+                window.external.AddFavorite(location.href,document.title);
+                onSuccess({
+                    result: true
+                });
+            }else{
+                onError(new Error("Your browser does not support adding to favorites"));
+            }
+        } catch(error) {
+            onError(error);
+        }
+    }
+
+    /**
+     * Open Link in Current Platform
+     * @param {string} url Link URL
+     */
+    OpenLink(url){
+        window.open(url, "_blank");
     }
 }
 

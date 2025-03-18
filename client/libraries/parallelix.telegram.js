@@ -28,6 +28,7 @@ class ParallelixTelegram extends ParallelixWrapper {
         this.options = extendedOptions;
         this.platform = instance;
         this.isInitialized = false;
+        this.invoker = null;
 
         // Launch Params
         this.launchParams = null;
@@ -59,7 +60,9 @@ class ParallelixTelegram extends ParallelixWrapper {
         // Load Telegram Mini Apps SDK Library
         self.platform.LoadLibrary("https://telegram.org/js/telegram-web-app.js?56", () => {
             self.isInitialized = true;
+            self.invoker = window?.Telegram?.WebApp;
             self.OnInitialized({});
+            self.HandleEvents();
         }, self.OnError);
     }
 
@@ -72,15 +75,15 @@ class ParallelixTelegram extends ParallelixWrapper {
         let self = this;
 
         // Check if Telegram SDK is initialized
-        if(!self.isInitialized || !window?.Telegram?.WebApp) {
+        if(!self.isInitialized || !self.invoker) {
             onError(new Error("Telegram SDK is not initialized"));
             return;
         }
 
         try{
             // Get Launch Params
-            self.launchParams = window?.Telegram?.WebApp?.initDataUnsafe;
-            self.launchParamsRaw = window?.Telegram?.WebApp?.initData;
+            self.launchParams = self.invoker?.initDataUnsafe;
+            self.launchParamsRaw = self.invoker?.initData;
             onSuccess(self.launchParams);
         } catch(error) {
             onError(error); 
@@ -106,6 +109,134 @@ class ParallelixTelegram extends ParallelixWrapper {
         }
 
         return isTelegramPlatform;
+    }
+
+    /**
+     * Handle All Telegram Web Apps Events
+     */
+    HandleEvents(){
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+        
+        // Get All Handled Events
+        const handledEvents = self.handledEvents;
+
+        // Subscribe to All Handled Events
+        for(const event of handledEvents){
+            const { eventName, eventHandler } = event;
+            window.Telegram.WebApp.onEvent(eventName, eventHandler);
+        }
+    }
+
+    /**
+     * Get Client Information
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetClientInfo(onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Get Client Information
+        onSuccess({
+            platform: self.invoker?.platform,
+            version: self.invoker?.version
+        });
+    }
+
+    /**
+     * Toggle Fullscreen for Telegram Web Apps
+     * @param {boolean} isEnabled Enable or Disable Fullscreen
+     */
+    ToggleFullscreen(isEnabled) {
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Toggle Fullscreen
+        if(isEnabled) {
+            window.Telegram.WebApp.requestFullscreen();
+        } else {
+            window.Telegram.WebApp.exitFullscreen();
+        }
+    }
+
+    /**
+     * Add Application to Home Screen
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AddToHomeScreen(onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Add Application to Home Screen
+        window.Telegram.WebApp.addToHomeScreen();
+        onSuccess({
+            result: true
+        });
+    }
+
+    /** 
+     * Open Internal Payment Form
+     * @param {string} parameters Payment Form URL
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    OpenPaymentForm(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // On Invoice Closed
+        function onInvoiceClosed(){
+            self.RemoveEventListener("invoiceClosed", onInvoiceClosed);
+            onSuccess();
+        }
+
+        // Open Payment Form
+        self.AddEventListener("invoiceClosed", onInvoiceClosed);
+        self.invoker.openInvoice(parameters, onSuccess);
+    }
+
+    /**
+     * Open Link in Current Platform
+     * @param {string} url Link URL
+     */
+    OpenLink(url){
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Open Link
+        self.invoker.openLink(url);
     }
 }
 
