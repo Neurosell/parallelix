@@ -187,6 +187,80 @@ class ParallelixWrapper {
     }
 
     /**
+     * Allow Notifications
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AllowNotifications(onSuccess = function(data){}, onError = function(error){}){
+        console.error("AllowNotifications is not implemented for this platform");
+        onError(new Error("AllowNotifications is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Show QR Reader
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    ShowQRReader(onSuccess = function(data){}, onError = function(error){}){
+        console.error("ShowQRReader is not implemented for this platform");
+        onError(new Error("ShowQRReader is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Get User Email
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetUserEmail(onSuccess = function(data){}, onError = function(error){}){
+        console.error("GetUserEmail is not implemented for this platform");
+        onError(new Error("GetUserEmail is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Request Location
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestLocation(onSuccess = function(data){}, onError = function(error){}){
+        console.error("RequestLocation is not implemented for this platform");
+        onError(new Error("RequestLocation is not implemented for this platform"));
+        return;
+    }
+
+    // TODO: Get Phone Number
+
+    // TODO: Get User Info
+
+    // TODO: Request Auth Token
+
+    /**
+     * Get Storage
+     * @param {object} parameters Storage Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetStorage(parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("GetStorage is not implemented for this platform");
+        onError(new Error("GetStorage is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Set Storage
+     * @param {object} parameters Storage Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    SetStorage(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        console.error("SetStorage is not implemented for this platform");
+        onError(new Error("SetStorage is not implemented for this platform"));
+        return;
+    }
+
+    /**
      * Get Current Platform Invoker
      * @returns {object} Invoker
      */
@@ -219,6 +293,8 @@ class ParallelixWrapper {
         return;
     }
 
+    // TODO: Call API Method
+
     /**
      * Open Link in Current Platform
      * @param {string} url Link URL
@@ -228,6 +304,10 @@ class ParallelixWrapper {
         onError(new Error("OpenLink is not implemented for this platform"));
         return;
     }
+
+    // TODO: Close Application
+
+    // TODO: Go Back
 }
 
 /**

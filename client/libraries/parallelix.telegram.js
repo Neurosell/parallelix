@@ -268,6 +268,56 @@ class ParallelixTelegram extends ParallelixWrapper {
         // Open Link
         self.invoker.openLink(url);
     }
+
+    /**
+     * Get Storage
+     * @param {object} parameters Storage Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetStorage(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Get Telegram Parameters
+        parameters = parameters?.telegram || {};
+        
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+        
+        // Get Storage
+        let storage = localStorage.getItem(parameters.key);
+        onSuccess({
+            result: storage
+        });
+    }
+
+    /**
+     * Set Storage
+     * @param {object} parameters Storage Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    SetStorage(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Get Telegram Parameters
+        parameters = parameters?.telegram || {};
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Set Storage
+        localStorage.setItem(parameters.key, parameters.value);
+        onSuccess({
+            result: true
+        });
+    }
 }
 
 // Add VK Platform Class to Parallelix

@@ -255,6 +255,56 @@ class ParallelixWeb extends ParallelixWrapper {
     OpenLink(url){
         window.open(url, "_blank");
     }
+
+    /**
+     * Get Storage
+     * @param {object} parameters Storage Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetStorage(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Get Web Parameters
+        parameters = parameters?.web || {};
+        
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }
+        
+        // Get Storage
+        let storage = localStorage.getItem(parameters.key);
+        onSuccess({
+            result: storage
+        });
+    }
+
+    /**
+     * Set Storage
+     * @param {object} parameters Storage Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    SetStorage(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Get Web Parameters
+        parameters = parameters?.web || {};
+
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }
+
+        // Set Storage
+        localStorage.setItem(parameters.key, parameters.value);
+        onSuccess({
+            result: true
+        });
+    }
 }
 
 // Add VK Platform Class to Parallelix

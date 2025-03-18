@@ -368,6 +368,80 @@ class ParallelixVK extends ParallelixWrapper {
     OpenLink(url){
         window.open(url, "_blank");
     }
+
+    /**
+     * Allow Notifications
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AllowNotifications(onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Allow Notifications
+        self.invoker.send('VKWebAppAllowNotifications').then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Get Storage
+     * @param {object} parameters Storage Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetStorage(parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        } 
+
+        // Get Storage
+        self.invoker.send('VKWebAppStorageGetKeys').then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Set Storage
+     * @param {object} parameters Storage Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    SetStorage(parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};  
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }   
+
+        // Set Storage
+        self.invoker.send('VKWebAppStorageSet', parameters).then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
 }
 
 // Add VK Platform Class to Parallelix
