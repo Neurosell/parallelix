@@ -219,6 +219,9 @@ class ParallelixWeb extends ParallelixWrapper {
     AddToFavorites(parameters, onSuccess = (data) => {}, onError = (error) => {}){
         let self = this;
 
+        // Get Web Parameters
+        parameters = parameters?.web || {};
+
         // Check if Web App is initialized
         if(!self.isInitialized) {
             onError(new Error("Web App is not initialized"));
@@ -251,6 +254,103 @@ class ParallelixWeb extends ParallelixWrapper {
      */
     OpenLink(url){
         window.open(url, "_blank");
+    }
+
+    /**
+     * Get Storage
+     * @param {object} parameters Storage Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetStorage(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Get Web Parameters
+        parameters = parameters?.web || {};
+        
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }
+        
+        // Get Storage
+        let storage = localStorage.getItem(parameters.key);
+        onSuccess({
+            result: storage
+        });
+    }
+
+    /**
+     * Set Storage
+     * @param {object} parameters Storage Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    SetStorage(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Get Web Parameters
+        parameters = parameters?.web || {};
+
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }
+
+        // Set Storage
+        localStorage.setItem(parameters.key, parameters.value);
+        onSuccess({
+            result: true
+        });
+    }
+
+    /**
+     * Request Location
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestLocation(onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }
+
+        // Request Location
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        } else {
+            onError(new Error("Geolocation is not supported"));
+        }
+    }
+
+    /**
+     * Close Application
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CloseApplication(onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if Web App is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Web App is not initialized"));
+            return;
+        }
+
+        // Close Application
+        window.close();
+    }
+    
+    /**
+     * Go Back
+     */
+    GoBack(){
+        window.history.back();
     }
 }
 

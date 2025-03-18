@@ -205,6 +205,9 @@ class ParallelixTelegram extends ParallelixWrapper {
     OpenPaymentForm(parameters, onSuccess = (data) => {}, onError = (error) => {}){
         let self = this;
 
+        // Get Telegram Parameters
+        parameters = parameters?.telegram || {};
+
         // Check if Telegram SDK is initialized
         if(!self.isInitialized || !self.invoker) {
             onError(new Error("Telegram SDK is not initialized"));
@@ -222,6 +225,33 @@ class ParallelixTelegram extends ParallelixWrapper {
         self.invoker.openInvoice(parameters, onSuccess);
     }
 
+    /** 
+     * Publish Story
+     * @param {string} mediaURL Media URL
+     * @param {object} parameters Story Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    PublishStory(mediaURL, parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Get Telegram Parameters
+        parameters = parameters?.telegram || {};
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }   
+
+        // Publish Story
+        self.invoker.shareToStory(mediaURL, parameters);
+        onSuccess({
+            result: true
+        });
+    }
+    
+
     /**
      * Open Link in Current Platform
      * @param {string} url Link URL
@@ -237,6 +267,164 @@ class ParallelixTelegram extends ParallelixWrapper {
 
         // Open Link
         self.invoker.openLink(url);
+    }
+
+    /**
+     * Get Storage
+     * @param {object} parameters Storage Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetStorage(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Get Telegram Parameters
+        parameters = parameters?.telegram || {};
+        
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+        
+        // Get Storage
+        let storage = localStorage.getItem(parameters.key);
+        onSuccess({
+            result: storage
+        });
+    }
+
+    /**
+     * Set Storage
+     * @param {object} parameters Storage Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    SetStorage(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Get Telegram Parameters
+        parameters = parameters?.telegram || {};
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Set Storage
+        localStorage.setItem(parameters.key, parameters.value);
+        onSuccess({
+            result: true
+        });
+    }
+
+    /**
+     * Close Application
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CloseApplication(onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Close Application
+        self.invoker.close();
+        onSuccess({
+            result: true
+        });
+    }
+
+    /**
+     * Show QR Reader
+     * @param {object} parameters QR Reader Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    ShowQRReader(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Get Telegram Parameters
+        parameters = parameters?.telegram || {};
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Show QR Reader
+        self.invoker.showScanQrPopup(parameters, onSuccess);
+    }
+
+    /**
+     * Request User Phone
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestUserPhone(onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Request User Phone
+        self.invoker.requestContact(onSuccess);
+    }
+
+    /**
+     * Get User Info    
+     * @param {object} parameters User Info Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetUserInfo(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Get Telegram Parameters
+        parameters = parameters?.telegram || {};
+        
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Get User Info
+        onSuccess(self.launchParams.user);
+    }
+
+    /**
+     * Request Location
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestLocation(onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Request Location
+        self.invoker.LocationManager.getLocation(onSuccess);
+    }
+
+    /**
+     * Go Back
+     */
+    GoBack(){
+        window.history.back();
     }
 }
 

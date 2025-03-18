@@ -175,13 +175,118 @@ class ParallelixWrapper {
 
     /**
      * Publish Story
+     * @param {string} mediaURL Media URL
      * @param {object} parameters Story Parameters
      * @param {Function} onSuccess Success Callback
      * @param {Function} onError Error Callback
      */
-    PublishStory(parameters, onSuccess = function(data){}, onError = function(error){}){
+    PublishStory(mediaURL, parameters, onSuccess = function(data){}, onError = function(error){}){
         console.error("PublishStory is not implemented for this platform"); 
         onError(new Error("PublishStory is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Allow Notifications
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AllowNotifications(onSuccess = function(data){}, onError = function(error){}){
+        console.error("AllowNotifications is not implemented for this platform");
+        onError(new Error("AllowNotifications is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Show QR Reader
+     * @param {object} parameters QR Reader Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    ShowQRReader(parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("ShowQRReader is not implemented for this platform");
+        onError(new Error("ShowQRReader is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Request User Email
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestUserEmail(onSuccess = function(data){}, onError = function(error){}){
+        console.error("RequestUserEmail is not implemented for this platform");
+        onError(new Error("RequestUserEmail is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Request Location
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestLocation(onSuccess = function(data){}, onError = function(error){}){
+        console.error("RequestLocation is not implemented for this platform");
+        onError(new Error("RequestLocation is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Request User Phone
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestUserPhone(onSuccess = function(data){}, onError = function(error){}){
+        console.error("RequestUserPhone is not implemented for this platform");
+        onError(new Error("RequestUserPhone is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Get User Info
+     * @param {object} parameters User Info Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetUserInfo(parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("GetUserInfo is not implemented for this platform");
+        onError(new Error("GetUserInfo is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Request Auth Token
+     * @param {object} parameters Auth Token Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestAuthToken(parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("RequestAuthToken is not implemented for this platform");
+        onError(new Error("RequestAuthToken is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Get Storage
+     * @param {object} parameters Storage Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetStorage(parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("GetStorage is not implemented for this platform");
+        onError(new Error("GetStorage is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Set Storage
+     * @param {object} parameters Storage Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    SetStorage(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        console.error("SetStorage is not implemented for this platform");
+        onError(new Error("SetStorage is not implemented for this platform"));
         return;
     }
 
@@ -219,12 +324,44 @@ class ParallelixWrapper {
     }
 
     /**
+     * Call Custom API Method
+     * @param {string} methodName Method Name
+     * @param {object} parameters Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CallAPI(methodName, parameters, onSuccess = function(data){}, onError = function(error){}){
+        console.error("CallAPI is not implemented for this platform");
+        onError(new Error("CallAPI is not implemented for this platform"));
+        return;
+    }
+
+    /**
      * Open Link in Current Platform
      * @param {string} url Link URL
      */
     OpenLink(url){
         console.error("OpenLink is not implemented for this platform");
         onError(new Error("OpenLink is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Close Application
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CloseApplication(onSuccess = function(data){}, onError = function(error){}){
+        console.error("CloseApplication is not implemented for this platform");
+        onError(new Error("CloseApplication is not implemented for this platform"));
+        return;
+    }
+
+    /**
+     * Go Back
+     */
+    GoBack(){
+        console.error("GoBack is not implemented for this platform");
         return;
     }
 }
@@ -243,6 +380,7 @@ class Parallelix {
         const clientVersion = "1.0.0";
         const defaultOptions = {
             // Platforms Defenition
+            baseModulesPath: "/libraries/",                 // Base Modules Path (by default "/libraries/")
             supportedPlatforms: ["vk", "telegram"],         // Supported Platforms Example (by default VK, telegram)
             vk: {},                                         // VK Wrapper Options Example
             telegram: {},                                   // Telegram Wrapper Options Example
@@ -287,7 +425,8 @@ class Parallelix {
         self.options.supportedPlatforms.forEach(platform => {
             if(!self.wrappers?.[platform]) {
                 // Load Library
-                self.LoadLibrary(`/libraries/parallelix.${platform}.js`, () => {
+                let libraryPath = `${self.options.baseModulesPath}parallelix.${platform}.js`;
+                self.LoadLibrary(libraryPath, () => {
                     if(!Parallelix._platformClasses?.[platform]) {
                         self.OnError(new Error(`"${platform}" platform wrapper class is not found.`));
                         return;

@@ -210,6 +210,9 @@ class ParallelixVK extends ParallelixWrapper {
     OpenPaymentForm(parameters, onSuccess = (data) => {}, onError = (error) => {}){
         let self = this;
 
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+
         // Check if VK Bridge is initialized
         if(!self.isInitialized) {
             onError(new Error("VK Bridge is not initialized"));
@@ -233,6 +236,9 @@ class ParallelixVK extends ParallelixWrapper {
      */
     CallCustomMethod(methodName, params = {}, onSuccess = (data) => {}, onError = (error) => {}){
         let self = this;
+
+        // Get VK Parameters
+        params = params?.vk || {};
 
         // Check if VK Bridge is initialized
         if(!self.isInitialized) {
@@ -279,7 +285,10 @@ class ParallelixVK extends ParallelixWrapper {
      */
     AddToFavorites(parameters, onSuccess = function(data){}, onError = function(error){}){
         let self = this;
-        
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+
         // Check if VK Bridge is initialized
         if(!self.isInitialized) {
             onError(new Error("VK Bridge is not initialized"));
@@ -302,7 +311,10 @@ class ParallelixVK extends ParallelixWrapper {
      */
     ShareApplication(parameters, onSuccess = function(data){}, onError = function(error){}){
         let self = this;
-        
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+
         // Check if VK Bridge is initialized
         if(!self.isInitialized) {
             onError(new Error("VK Bridge is not initialized"));
@@ -317,6 +329,37 @@ class ParallelixVK extends ParallelixWrapper {
         });
     }
     
+    /**
+     * Publish Story
+     * @param {string} mediaURL Media URL
+     * @param {object} parameters Story Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    PublishStory(mediaURL, parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Check if mediaURL is provided
+        if(!parameters?.url && mediaURL) {
+            parameters.url = mediaURL;
+        }
+
+        // Publish Story
+        self.invoker.send('VKWebAppShowStoryBox', parameters).then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
 
     /**
      * Open Link in Current Platform
@@ -324,6 +367,283 @@ class ParallelixVK extends ParallelixWrapper {
      */
     OpenLink(url){
         window.open(url, "_blank");
+    }
+
+    /**
+     * Allow Notifications
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    AllowNotifications(onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Allow Notifications
+        self.invoker.send('VKWebAppAllowNotifications').then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Get Storage
+     * @param {object} parameters Storage Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetStorage(parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        } 
+
+        // Get Storage
+        self.invoker.send('VKWebAppStorageGetKeys').then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Set Storage
+     * @param {object} parameters Storage Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    SetStorage(parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};  
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }   
+
+        // Set Storage
+        self.invoker.send('VKWebAppStorageSet', parameters).then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Close Application
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CloseApplication(onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Close Application
+        self.invoker.send('VKWebAppClose').then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Show QR Reader
+     * @param {object} parameters QR Reader Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    ShowQRReader(parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Show QR Reader
+        self.invoker.send('VKWebAppOpenCodeReader').then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Request User Phone
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestUserPhone(onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }   
+
+        // Request User Phone
+        self.invoker.send('VKWebAppGetPhoneNumber').then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Request User Email
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestUserEmail(onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        } 
+
+        // Request User Email
+        self.invoker.send('VKWebAppGetEmail').then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Get User Info
+     * @param {object} parameters User Info Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    GetUserInfo(parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+        
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+        
+        // Get User Info
+        self.invoker.send('VKWebAppGetUserInfo', parameters).then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Request Location
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestLocation(onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Request Location
+        self.invoker.send('VKWebAppGetGeodata').then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Req  uest Auth Token
+     * @param {object} parameters Auth Token Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    RequestAuthToken(parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }   
+
+        // Request Auth Token
+        self.invoker.send('VKWebAppGetAuthToken', parameters).then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Call Custom API Method
+     * @param {string} methodName Method Name
+     * @param {object} parameters Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    CallAPI(methodName, parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+
+        // Get Method Name
+        parameters.method = methodName;
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Call Custom API Method
+        self.invoker.send("VKWebAppCallAPIMethod", parameters).then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+    /**
+     * Go Back
+     */
+    GoBack(){
+        window.history.back();
     }
 }
 

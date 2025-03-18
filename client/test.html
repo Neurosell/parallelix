@@ -42,8 +42,34 @@
 
         <!-- Application Test -->
         <div id="application" class="application">
-            <h1>Parallelix Client Test</h1>
-            <p>Current Platform: <span id="current-platform">...</span></p>
+            <div class="content centred text-center mt-40">
+                <h1 class="full-width">Parallelix Client Test</h1>
+                <p class="full-width">Current Platform: <span id="current-platform">...</span></p>
+            </div>
+            <div class="content centred">
+                <div class="card welcome centred">
+                    <div class="card-content">
+                        <img class="card-avatar" src="https://i.pravatar.cc/300" style="display: none;" id="user-avatar" />
+                        <h1>Hello, <span id="user-name">...</span>!</h1>
+                        <p>This is a simple test application to demonstrate the capabilities of the Parallelix Client.</p>
+                    </div>
+                    <div class="card-footer">
+                        <button class="button dark full-width" id="add-to-home-screen">Add to Home Screen</button>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="card">
+                    <div class="card-content">
+                        <h1>System Information</h1>
+                        <p id="system-info">...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content centred text-center mt-40">
+                <p class="full-width">2025 &copy;Developed by <a href="https://neurosell.top/" class="link" target="_blank">Neurosell</a>. Learn more about <a href="https://neurosell.gitbook.io/parallelix" class="link" target="_blank">Parallelix</a>.</p>
+            </div>
         </div>
         <!-- Application Test -->
 
@@ -52,6 +78,10 @@
         <script type="text/javascript">
             /* Initialize Parallelix */
             const client = new Parallelix({
+                baseModulesPath: "/libraries/",
+                supportedPlatforms: ["vk", "telegram"],
+                vk: {},
+                telegram: {}
             });
             client.OnError = (error) => {
                 console.error(error.message);
@@ -61,10 +91,56 @@
                 console.log(client.Platform);
                 document.getElementById("current-platform").innerHTML = client.GetPlatformName();
                 hidePreloader();
+                updateUserInfo();
+                updateSystemInfo();
+                bindAddToHomeScreenButton();
             };
 
             /* Initialize Application */
             client.Initialize();
+
+            /* Bind Add to Home Screen Button */
+            function bindAddToHomeScreenButton(){
+                document.getElementById("add-to-home-screen").addEventListener("click", () => {
+                    client.Platform.AddToHomeScreen((data) => {
+                        document.getElementById("add-to-home-screen").innerHTML = "Added to Home Screen";
+                        document.getElementById("add-to-home-screen").disabled = true;
+                    }, (error) => {
+                        alert("Failed to add to home screen. Make sure you are running this application in a PWA mode.");
+                    });
+                });
+            }
+
+            /* Update User Info */
+            function updateUserInfo(){
+                client.Platform.GetUserInfo({}, (data) => {
+                    document.getElementById("user-name").innerHTML = data.first_name + " " + data.last_name;
+
+                    // Show User Avatar
+                    if(client.GetPlatformName() == "vk"){
+                        document.getElementById("user-avatar").src = data.photo_200;
+                    }else if(client.GetPlatformName() == "telegram"){
+                        document.getElementById("user-avatar").src = data.photo_url;
+                    }else{
+                        document.getElementById("user-avatar").src = "/img/avatar.png";
+                    }
+
+                    document.getElementById("user-avatar").style.display = "block";
+                }, (error) => {
+                    document.getElementById("user-name").innerHTML = "Anonymous";
+                    document.getElementById("user-avatar").src = "/img/avatar.png";
+                    document.getElementById("user-avatar").style.display = "block";
+                });
+            }
+
+            /* Update System Info */
+            function updateSystemInfo(){
+                client.Platform.GetLaunchParams((data) => {
+                    document.getElementById("system-info").innerHTML = JSON.stringify(data, null, 2).replaceAll("\n", "<br>");
+                }, (error) => {
+                    document.getElementById("system-info").innerHTML = "Failed to get system info";
+                });
+            }
 
             /* Hide Application Preloader */
             function hidePreloader() {
