@@ -329,6 +329,37 @@ class ParallelixVK extends ParallelixWrapper {
         });
     }
     
+    /**
+     * Publish Story
+     * @param {string} mediaURL Media URL
+     * @param {object} parameters Story Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    PublishStory(mediaURL, parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Check if mediaURL is provided
+        if(!parameters?.url && mediaURL) {
+            parameters.url = mediaURL;
+        }
+
+        // Publish Story
+        self.invoker.send('VKWebAppShowStoryBox', parameters).then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
 
     /**
      * Open Link in Current Platform

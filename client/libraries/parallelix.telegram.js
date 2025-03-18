@@ -225,6 +225,33 @@ class ParallelixTelegram extends ParallelixWrapper {
         self.invoker.openInvoice(parameters, onSuccess);
     }
 
+    /** 
+     * Publish Story
+     * @param {string} mediaURL Media URL
+     * @param {object} parameters Story Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    PublishStory(mediaURL, parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Get Telegram Parameters
+        parameters = parameters?.telegram || {};
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }   
+
+        // Publish Story
+        self.invoker.shareToStory(mediaURL, parameters);
+        onSuccess({
+            result: true
+        });
+    }
+    
+
     /**
      * Open Link in Current Platform
      * @param {string} url Link URL
