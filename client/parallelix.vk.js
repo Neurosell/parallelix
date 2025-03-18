@@ -12,13 +12,22 @@
 
 class ParallelixVK extends ParallelixWrapper {
     constructor(options = {}) {
-        super(options);
+        /* Base Wrapper Options */
+        const defaultOptions = {
 
-        /* Add Event Handlers */
+        };
+
+        // Extend Wrapper Options
+        let extendedOptions = {...defaultOptions, ...options};
+        super(extendedOptions);
+        this.options = extendedOptions;
+        
+
+        // Add Event Handlers
         this.OnError = (options?.OnError && typeof options?.OnError === "function") ? options.OnError : (error) => {
             console.error(`Parallelix VK Wrapper Error: ${error.message}`);
         };
-        this.OnInitialized = (options?.OnInitialized && typeof options?.OnInitialized === "function") ? options.OnInitialized : () => {
+        this.OnInitialized = (options?.OnInitialized && typeof options?.OnInitialized === "function") ? options.OnInitialized : (data) => {
             console.log(`Parallelix VK Wrapper Initialized`);
         };
     }

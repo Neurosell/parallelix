@@ -57,7 +57,13 @@ class Parallelix {
         /* Base Client Options */
         const clientVersion = "1.0.0";
         const defaultOptions = {
-            supportedPlatforms: ["vk", "telegram"]
+            // Platforms Defenition
+            supportedPlatforms: ["vk", "telegram"],         // Supported Platforms Example (by default VK, telegram)
+            vk: {},                                         // VK Wrapper Options Example
+            telegram: {},                                   // Telegram Wrapper Options Example
+
+            // Additional libraries
+            specificLibraries: [],                          // Additional Libraries for specific platforms { platform: "vk", script: "https://example.com/library.js" }
         };
 
         // Extend options from constructor options
@@ -89,6 +95,7 @@ class Parallelix {
         let platformsCount = self.options.supportedPlatforms.length;
         self.options.supportedPlatforms.forEach(platform => {
             if(!self.wrappers?.[platform]) {
+                // Load Library
                 self.LoadLibrary(`./client/parallelix.${platform}.js`, () => {
                     if(!Parallelix._platformClasses?.[platform]) {
                         self.OnError(new Error(`"${platform}" platform wrapper class is not found.`));
@@ -104,6 +111,39 @@ class Parallelix {
                         onConnected();
                     }
                 }, self.OnError);
+            }
+        });
+    }
+
+    /**
+     * Load Libraries
+     * @param {Array} libraries Libraries
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    LoadLibraries(libraries, onSuccess, onError){
+        let self = this;
+
+        // Check Libraries array length
+        if(!libraries || libraries.length === 0 || typeof libraries !== "array") {
+            onSuccess();
+            return;
+        }
+
+        // Remaining Libraries
+        let remainingLibraries = libraries.length;
+        libraries.forEach(library => {
+            try{
+                self.LoadLibrary(library, () => {
+                    remainingLibraries--;
+                    if(remainingLibraries === 0) {
+                        onSuccess();
+                    }
+                }, onError);
+            }catch(ex){
+                remainingLibraries--;
+                console.error(`Error loading library: ${library}`);
+                onError(ex);
             }
         });
     }
@@ -155,12 +195,23 @@ class Parallelix {
                 return;
             }
 
-            self.currentPlatform.OnError = self.OnError;
-            self.currentPlatform.OnInitialized = (data)=> {
-                console.log("Parallelix Platforms are Ready: ", data);
-                self.OnInitialized();
-            };
-            self.currentPlatform.Initialize();
+            /* Load Specific Libraries for current Platform */
+            let specificLibraries = self.options?.specificLibraries.filter(library => library.platform === self.currentPlatform) ?? [];
+            let specificLibrariesScripts = [];
+            for(let library of specificLibraries) {
+                specificLibrariesScripts.push(library.script);
+            }
+
+            // Load Specific Libraries
+            console.log(`Loading Specific Libraries for current Platform: ${specificLibraries.length} libraries...`);
+            self.LoadLibraries(specificLibrariesScripts, () => {
+                self.currentPlatform.OnError = self.OnError;
+                self.currentPlatform.OnInitialized = (data)=> {
+                    console.log("Parallelix Platforms are Ready: ", data);
+                    self.OnInitialized();
+                };
+                self.currentPlatform.Initialize();
+            });
         });
     }
 
