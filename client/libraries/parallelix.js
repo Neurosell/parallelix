@@ -199,10 +199,11 @@ class ParallelixWrapper {
 
     /**
      * Show QR Reader
+     * @param {object} parameters QR Reader Parameters
      * @param {Function} onSuccess Success Callback
      * @param {Function} onError Error Callback
      */
-    ShowQRReader(onSuccess = function(data){}, onError = function(error){}){
+    ShowQRReader(parameters, onSuccess = function(data){}, onError = function(error){}){
         console.error("ShowQRReader is not implemented for this platform");
         onError(new Error("ShowQRReader is not implemented for this platform"));
         return;

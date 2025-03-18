@@ -464,7 +464,34 @@ class ParallelixVK extends ParallelixWrapper {
             onError(error);
         });
     }
-    
+
+    /**
+     * Show QR Reader
+     * @param {object} parameters QR Reader Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    ShowQRReader(parameters, onSuccess = function(data){}, onError = function(error){}){
+        let self = this;
+
+        // Get VK Parameters
+        parameters = parameters?.vk || {};
+
+        // Check if VK Bridge is initialized
+        if(!self.isInitialized) {
+            onError(new Error("VK Bridge is not initialized"));
+            return;
+        }
+
+        // Show QR Reader
+        self.invoker.send('VKWebAppOpenCodeReader').then((data) => {
+            onSuccess(data);
+        }).catch((error) => {
+            onError(error);
+        });
+    }
+
+
     /**
      * Go Back
      */

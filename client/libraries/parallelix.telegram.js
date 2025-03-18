@@ -339,6 +339,28 @@ class ParallelixTelegram extends ParallelixWrapper {
             result: true
         });
     }
+
+    /**
+     * Show QR Reader
+     * @param {object} parameters QR Reader Parameters
+     * @param {Function} onSuccess Success Callback
+     * @param {Function} onError Error Callback
+     */
+    ShowQRReader(parameters, onSuccess = (data) => {}, onError = (error) => {}){
+        let self = this;
+
+        // Get Telegram Parameters
+        parameters = parameters?.telegram || {};
+
+        // Check if Telegram SDK is initialized
+        if(!self.isInitialized || !self.invoker) {
+            onError(new Error("Telegram SDK is not initialized"));
+            return;
+        }
+
+        // Show QR Reader
+        self.invoker.showScanQrPopup(parameters, onSuccess);
+    }
     
     /**
      * Go Back
