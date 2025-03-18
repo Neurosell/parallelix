@@ -95,7 +95,8 @@ class Parallelix {
                         return;
                     }
 
-                    self.wrappers[platform] = new Parallelix._platformClasses[platform]();
+                    let wrapperConfig = (self?.options?.[platform] && typeof self?.options?.[platform] === "object") ? self?.options?.[platform] : {};
+                    self.wrappers[platform] = new Parallelix._platformClasses[platform](wrapperConfig);
                     platformsCount--;
                     console.log(`"${platform}" platform wrapper connected.`);
                     if (platformsCount === 0) {
@@ -123,7 +124,10 @@ class Parallelix {
         document.body.appendChild(script);
     }
 
-    /* Detect Current Platform */
+    /**
+     * Detect Current Platform
+     * and initialize wrapper
+     */
     DetectPlatform() {
         let self = this;
         for(let platform in self.wrappers) {    
@@ -158,6 +162,14 @@ class Parallelix {
             };
             self.currentPlatform.Initialize();
         });
+    }
+
+    /**
+     * Get Current Platform Wrapper
+     * @returns {Object} Current Platform Wrapper
+     */
+    Wrapper() {
+        return this.currentPlatform;
     }
 
     // Internal Usage Only
