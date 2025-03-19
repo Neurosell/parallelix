@@ -35,7 +35,7 @@ Read more about development progress and new modules in <a href="https://github.
 To work with Parallelix - just plug the script into your project and write the configurations. We have described the connection process below.
 
 **1. Download libraries:**
-From <a href="https://github.com/Neurosell/parallelix/releases">GitHub</a>;
+From <a href="https://github.com/Neurosell/parallelix/releases">GitHub</a> and **put all files from "/libraries/" into your project;
 
 **2. In HTML File:**
 ```html
@@ -46,7 +46,7 @@ From <a href="https://github.com/Neurosell/parallelix/releases">GitHub</a>;
 ```javascript
 // Configure Parallelix
 const client = new Parallelix({
-    baseModulesPath: "/libraries/",
+    baseModulesPath: "/libraries/",            // Where your modules located
     supportedPlatforms: ["vk", "telegram"],
     vk: {},
     telegram: {}
