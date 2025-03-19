@@ -45,7 +45,7 @@ From <a href="https://github.com/Neurosell/parallelix/releases">GitHub</a> and *
 **3. In your JS Code:**
 ```javascript
 // Configure Parallelix
-const client = new Parallelix({
+const client = new Parallelix("mediaURL", {
     baseModulesPath: "/libraries/",            // Where your modules located
     supportedPlatforms: ["vk", "telegram"],
     vk: {},
