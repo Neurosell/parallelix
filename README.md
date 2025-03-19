@@ -60,7 +60,7 @@ client.OnInitialized = (data) => {};
 client.Initialize();
 ```
 
-**4. After OnInitialized is fired, you can use Parallelix: **
+**4. After OnInitialized is fired, you can use Parallelix:**
 ```javascript
 client.Platform.PublishStory({ 
     vk: {}, telegram: {}    // Your Stories Parameters
