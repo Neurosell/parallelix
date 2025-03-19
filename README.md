@@ -1,7 +1,7 @@
 # Parallelix JS
 <img src="https://github.com/Neurosell/parallelix/blob/develop/wiki_visuals/Header.png?raw=true" alt="Parallelix JS - cross-platform web-app library for client initialization" style="width: 100%" /><br/>
 
-<p align="center">**Parallelix Toolkit** - Written in Vanilla JS, a modular library that allows you to forget about the existence of different client SDKs when developing your cross-platform web applications, be it VK Mini Apps, WeChat Mini Apps, Progressive Web App or Apache Cordova based applications</p>
+<p align="center"><b>Parallelix Toolkit</b> - Written in Vanilla JS, a modular library that allows you to forget about the existence of different client SDKs when developing your cross-platform web applications, be it VK Mini Apps, WeChat Mini Apps, Progressive Web App or Apache Cordova based applications</p>
 
 <hr/>
 
@@ -35,7 +35,7 @@ Read more about development progress and new modules in <a href="https://github.
 To work with Parallelix - just plug the script into your project and write the configurations. We have described the connection process below.
 
 **1. Download libraries:**
-From <a href="https://github.com/Neurosell/parallelix/releases">GitHub</a>;
+From <a href="https://github.com/Neurosell/parallelix/releases">GitHub</a> and **put all files from "/libraries/" into your project;
 
 **2. In HTML File:**
 ```html
@@ -45,8 +45,8 @@ From <a href="https://github.com/Neurosell/parallelix/releases">GitHub</a>;
 **3. In your JS Code:**
 ```javascript
 // Configure Parallelix
-const client = new Parallelix({
-    baseModulesPath: "/libraries/",
+const client = new Parallelix("mediaURL", {
+    baseModulesPath: "/libraries/",            // Where your modules located
     supportedPlatforms: ["vk", "telegram"],
     vk: {},
     telegram: {}
@@ -60,7 +60,7 @@ client.OnInitialized = (data) => {};
 client.Initialize();
 ```
 
-**4. After OnInitialized is fired, you can use Parallelix: **
+**4. After OnInitialized is fired, you can use Parallelix:**
 ```javascript
 client.Platform.PublishStory({ 
     vk: {}, telegram: {}    // Your Stories Parameters
