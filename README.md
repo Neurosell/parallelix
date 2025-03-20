@@ -45,7 +45,7 @@ From <a href="https://github.com/Neurosell/parallelix/releases">GitHub</a> and *
 **3. In your JS Code:**
 ```javascript
 // Configure Parallelix
-const client = new Parallelix("mediaURL", {
+const client = new Parallelix({
     baseModulesPath: "/libraries/",            // Where your modules located
     supportedPlatforms: ["vk", "telegram"],
     vk: {},
@@ -62,7 +62,7 @@ client.Initialize();
 
 **4. After OnInitialized is fired, you can use Parallelix:**
 ```javascript
-client.Platform.PublishStory({ 
+client.Platform.PublishStory("mediaURL", { 
     vk: {}, telegram: {}    // Your Stories Parameters
 }, (data)=> {
     console.log(data);
