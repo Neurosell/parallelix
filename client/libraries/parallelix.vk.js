@@ -57,7 +57,7 @@ class ParallelixVK extends ParallelixWrapper {
         let self = this;
 
         // Load VK Bridge Library
-        self.platform.LoadLibrary("https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js", () => {
+        self.platform.LoadLibrary("https://s3.twcstorage.ru/e1c4c0e1-main-cdn/browser.min.js", () => {
             // Initialize VK Bridge
             self.invoker = vkBridge;
             self.invoker.send('VKWebAppInit').then((data) => { 
