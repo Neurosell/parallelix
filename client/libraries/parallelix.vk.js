@@ -106,10 +106,11 @@ class ParallelixVK extends ParallelixWrapper {
      * @returns {boolean}
      */
     IsCurrentPlatform(){
+        let self = this;
         let isVKPlatform = false;
 
         // Check VK by Origin
-        let origins = window.location.ancestorOrigins;
+        let origins = self.PlatformOrigins;
         if(origins.length > 0) {
             for(let origin of origins) {
                 if(origin.includes("vk.com")) {
@@ -126,6 +127,27 @@ class ParallelixVK extends ParallelixWrapper {
         }
 
         return isVKPlatform;
+    }
+
+    get PlatformOrigins(){
+        if (window.location.ancestorOrigins !== undefined) {
+            return [...window.location.ancestorOrigins];
+        }
+        const urls = [];
+        let parentWin = window;
+        while (parentWin !== window.top) {
+            if (parentWin.document.referrer) {
+                try {
+                    const url = new URL(parentWin.document.referrer);
+                    urls.push(url.origin);
+                } catch (e) {
+                    // console.error
+                }
+            }
+            // @ts-ignore
+            parentWin = parentWin.parent;
+        }
+        return urls;
     }
 
     /**
