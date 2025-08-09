@@ -1,4 +1,6 @@
 # Parallelix JS
+> **Warning**<br> This library is deprecated. Use <a href="https://nuid.ru/">NUID</a> for cross-platform authentication and social functions
+
 <img src="https://github.com/Neurosell/parallelix/blob/develop/wiki_visuals/Header.png?raw=true" alt="Parallelix JS - cross-platform web-app library for client initialization" style="width: 100%" /><br/>
 
 <p align="center"><b>Parallelix Toolkit</b> - Written in Vanilla JS, a modular library that allows you to forget about the existence of different client SDKs when developing your cross-platform web applications, be it VK Mini Apps, WeChat Mini Apps, Progressive Web App or Apache Cordova based applications</p>
