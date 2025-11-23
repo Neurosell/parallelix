@@ -1,0 +1,63 @@
+version: "3.8"
+services:
+  # Express App
+  app:
+    build: .
+    container_name: app
+    ports:
+      - "8080:8080"
+      - "4443:4443"
+    restart: always
+    working_dir: /parallelix
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+      - .:/app
+      - /app/node_modules
+    environment:
+      - ENV_MODE=production
+    networks:
+      - app-network
+
+  # NGINX Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - nginx-config:/etc/nginx
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+  # Certbot
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+      - nginx-config:/etc/nginx
+    networks:
+      - app-network
+    profiles: ["certbot"]
+
+# Volumes
+volumes:
+  nginx-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./nginx
+      o: bind
+
+# Network Bridge
+networks:
+  app-network:
+    driver: bridge
