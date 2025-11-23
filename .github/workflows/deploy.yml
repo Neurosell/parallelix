@@ -1,0 +1,82 @@
+name: Deploy to Production Server
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure Git to trust all directories
+        run: |
+          git config --global --add safe.directory '*'
+          git config --global user.name "Neurosell"
+          git config --global user.email "start@ncommx.com"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify Git status
+        run: git status
+
+      - name: Setup SSH key with passphrase
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          eval "$(ssh-agent -s)"
+          echo "echo '${{ secrets.SERVER_SSH_PASSPHRASE }}'" > ~/.ssh/askpass.sh
+          chmod +x ~/.ssh/askpass.sh
+          DISPLAY=:0 SSH_ASKPASS=~/.ssh/askpass.sh setsid ssh-add ~/.ssh/id_ed25519 </dev/null
+      - name: Fix permission before upload
+        run: chmod -R a+rX .
+      - name: Prepare deploy directory on server
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}
+          script: |
+            sudo mkdir -p /parallelix/
+            sudo chown -R $USER:$USER /parallelix/
+            sudo chmod -R 755 /parallelix/
+            sudo mkdir -p /var/www/certbot
+            sudo chown -R $USER:$USER /var/www/certbot
+            sudo chmod -R 755 /var/www/certbot
+      - name: Copy project files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}
+          source: "."
+          target: "/yes-lms-backend/"
+      - name: Clean possible conflicting containers
+        run: |
+          sudo docker rm -f nginx || true
+          sudo docker rm -f certbot || true
+          sudo docker rm -f app || true
+          sudo docker rm -f certbot_renew || true
+      - name: Wait for Next Step
+        run: sleep 5
+      - name: Clean Docker Network
+        run: |
+          sudo docker network prune -f
+      - name: Wait for Next Step
+        run: sleep 5
+      - name: Run deployment script
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}
+          script: |
+            sudo chmod +x /parallelix/deploy.sh
+            sudo /parallelix/deploy.sh
