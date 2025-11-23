@@ -56,7 +56,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           passphrase: ${{ secrets.SERVER_SSH_PASSPHRASE }}
           source: "."
-          target: "/yes-lms-backend/"
+          target: "/parallelix/"
       - name: Clean possible conflicting containers
         run: |
           sudo docker rm -f nginx || true
